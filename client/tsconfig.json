@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "target": "es6",
+    "module": "CommonJS",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+        "baseUrl": "./src",
+        "paths": {
+          "@app/*": [ "components/*" ],
+          "@shared/*": [ "components/shared/*" ],
+          "@api/*": [ "api/*" ],
+          "@auth/*": [ "components/AuthProvider/*" ]
+        },
+  },
+  "include": [ "src", "craco.config.js", "craco.config.prod.js"],
+  "exclude": [
+    "node_modules"
+  ]
+}

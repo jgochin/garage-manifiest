@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "rootDir": "src",
+    "baseUrl": "./",
+    "outDir": "dist",
+    "paths": {
+      "@/r/*": [
+        "src/routes/*"
+      ],
+      "@/*": [
+        "src/*",
+      ],
+    },
+    "plugins": [
+      // Transform paths in output .js files
+      {
+        "transform": "typescript-transform-paths"
+      },
+      // Transform paths in output .d.ts files (Include this line if you output declarations files)
+      {
+        "transform": "typescript-transform-paths",
+        "afterDeclarations": true
+      }
+    ]
+  },
+  "include": [
+    "./src/**/*.ts", "src/routes/search/index.spec.ts~",
+    // "../stuff/auth-middleware.ts"
+  ]
+}
