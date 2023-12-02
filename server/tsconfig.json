@@ -11,9 +11,6 @@
     "baseUrl": "./",
     "outDir": "dist",
     "paths": {
-      "@/r/*": [
-        "src/routes/*"
-      ],
       "@/*": [
         "src/*",
       ],
@@ -31,7 +28,8 @@
     ]
   },
   "include": [
-    "./src/**/*.ts", "src/routes/search/index.spec.ts~",
+    "./src/**/*.ts", 
+    // "src/routes/search/index.spec.ts~",
     // "../stuff/auth-middleware.ts"
   ]
 }

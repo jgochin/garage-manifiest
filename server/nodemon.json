@@ -6,5 +6,5 @@
     "ignore": [
         "src/**/*.spec.ts"
     ],
-    "exec": "DEBUG=mongoose DEBUG=express NODE_ENV=development tsx src/app.ts"
+    "exec": "tsx src/app.ts"
 }

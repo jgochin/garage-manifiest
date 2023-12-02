@@ -14,12 +14,9 @@ export interface ILocation extends Document {
     contentLength: Number
 }
 
-export interface MulterRequest extends Request {
-    file: {
-        buffer: Buffer;
-        mimetype: string;
-    };
-}
+// export interface MulterRequest extends Request {
+//     file: Express.Multer.File
+// }
 
 export interface IUser {
     _id?: string,

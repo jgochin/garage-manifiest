@@ -9,13 +9,13 @@ searchRouter.get('/:criteria', async (req: Request, res: Response) => {
         const results = await ManifestItem.find({ $text: { $search: criteria }});
 
         if (results) {
-            res.status(200).json(results);
+            res.status(200).json(results).end();
         } else {            
             res.status(204).end()
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: 'Internal server error' }).end();
     }
 });
 

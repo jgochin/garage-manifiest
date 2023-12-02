@@ -1,5 +1,5 @@
-import manageRouter from '@/r/manage'
-import searchRouter from '@/r/search'
-import locationRouter from '@/r/location'
+import manageRouter from '@/routes/manage'
+import searchRouter from '@/routes/search'
+import locationRouter from '@/routes/location'
 
 export { manageRouter, searchRouter, locationRouter }

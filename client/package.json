@@ -26,7 +26,7 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build",
+    "build": "craco build && cp -R ./build ../server/dist/public/",
     "test": "craco test"
   },
   "eslintConfig": {

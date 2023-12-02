@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import { manageRouter, searchRouter, locationRouter } from '@/routes';
@@ -5,6 +6,7 @@ import mongoose, { ConnectOptions } from 'mongoose';
 import configureAppSecurity from "@/app-security"
 import useConfig from '@/config'
 import morgan from 'morgan'
+import path from 'path'
 
 const config = useConfig()
 
@@ -29,7 +31,6 @@ function initApp() {
     // Configure App Security middleware
     configureAppSecurity(app)
 
-
     // Configure token verification middleware
     app.use(bodyParser.json()); // Parse JSON request bodies
     app.use(bodyParser.text())
@@ -39,12 +40,17 @@ function initApp() {
         res.status(200).send('OK').end()
     });
 
+    app.use(express.static(path.join(__dirname, 'public')));
+
     app.use('/items', manageRouter);
     app.use('/location', locationRouter);
     app.use('/search', searchRouter);
-    // app.use('/config', configRouter)
+    
+    app.get('/', (req, res) => {
+        res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    });
 
-    const port = 3001
+    const port: number = Number(process.env.PORT || 3001) 
     const server = app.listen(port, '0.0.0.0', () => {
         console.log('Server is running on port', port);
     });

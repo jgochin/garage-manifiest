@@ -1,0 +1,22 @@
+// tsconfig.prod.json
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "module": "NodeNext",
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "experimentalDecorators": true,
+        "resolvePackageJsonImports": true,
+    },
+    "paths": {
+        "@/*": [
+            "*",
+        ],
+    },
+    "include": [
+        "./src/**/*.ts",
+        // "src/routes/search/index.spec.ts~",
+        // "../stuff/auth-middleware.ts"
+    ]
+}

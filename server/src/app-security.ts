@@ -1,8 +1,8 @@
 
 import session from 'express-session';
-import { GetVerificationKey, expressjwt as jwt } from "express-jwt";
+// import { GetVerificationKey, expressjwt as jwt } from "express-jwt";
 import cors from 'cors';
-import jwksRsa from 'jwks-rsa';
+// import jwksRsa from 'jwks-rsa';
 
 function configureSession(app) {
     const MongoDBStore = require('connect-mongodb-session')(session);

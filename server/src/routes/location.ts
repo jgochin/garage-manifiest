@@ -1,72 +1,115 @@
-import ManifestItem from '@/models/manifest-item';
-import express, { Request, Response } from 'express';
+// tslint:disable:*
+
+import ManifestItem from '@/models/manifest-item'
+import express, { Request, Response } from 'express'
 import multer from 'multer'
-import Location from '@/models/locations';
-import { Readable } from 'stream';
-import mongoose from 'mongoose';
-import { ILocation } from '@/models/types';
-import mimeTypes from 'mime-types';
+import Location from '@/models/locations'
+import { Readable } from 'stream'
+import mongoose from 'mongoose'
+import { ILocation } from '@/models/types'
+import mimeTypes from 'mime-types'
 
-const locationRouter = express.Router();
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
-
+const locationRouter = express.Router()
+const storage = multer.memoryStorage()
+const upload = multer({ storage: storage })
 
 locationRouter.get('/:id', async (req: Request, res: Response) => {
     try {
-        const id = req.params.id;
-        const results = await ManifestItem.find({ location: id });
+        const id = req.params.id
+        const results = await ManifestItem.find({ location: id })
 
         if (results) {
-            res.status(200).json(results.map(location => location.item).sort());
+            res.status(200).json(results.map(location => location.item).sort())
         } else {
             res.status(204).end()
         }
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error(error)
+        res.status(500).json({ error: 'Internal server error' })
     }
-});
+})
+
+const uploadImage = async (location: string, file: any) => {
+    const conn = mongoose.connection
+    const bucket = new mongoose.mongo.GridFSBucket(conn.db, { bucketName: 'locationImages' })
+
+    const [fileType, fileExt] = file.mimetype.split('/')
+    const fileName = `${location}.${fileExt}`
+
+    // Use Promises and async/await for better readability
+    return new Promise((resolve, reject) => {
+        const uploadStream = bucket.openUploadStream(fileName)
+        const readableStream = new Readable()
+
+        readableStream.push(file.buffer)
+        readableStream.push(null)
+
+        readableStream.pipe(uploadStream)
+
+        uploadStream.on('finish', async () => {
+            try {
+                // Create a new Image document
+                const newImage = new Location({
+                    location,
+                    imageFileName: fileName,
+                    contentType: file.mimetype,
+                    contentLength: file.size,
+                })
+
+                // Save the Data URL to MongoDB
+                await newImage.save()
+
+                resolve('Image uploaded successfully')
+            } catch (error) {
+                reject(error)
+            }
+        })
+
+        uploadStream.on('error', (error) => {
+            reject(error)
+        })
+    })
+}
 
 locationRouter.get('/image/:location', async (req:Request, res: Response) => {
     try {
         const location: ILocation = await Location.findOne({location: req.params.location})
-        const conn = mongoose.connection;
-        const bucket = new mongoose.mongo.GridFSBucket(conn.db, { bucketName: 'locationImages' });
+        const conn = mongoose.connection
+        const bucket = new mongoose.mongo.GridFSBucket(conn.db, { bucketName: 'locationImages' })
 
 
         
-        const downloadStream: mongoose.mongo.GridFSBucketReadStream = bucket.openDownloadStreamByName(location.imageFileName);
-        const contentType = mimeTypes.lookup(location.imageFileName) || 'application/octet-stream';
+        const downloadStream: mongoose.mongo.GridFSBucketReadStream = bucket.openDownloadStreamByName(location.imageFileName)
+        const contentType = mimeTypes.lookup(location.imageFileName) || 'application/octet-stream'
         
-        res.set('Content-Type', String(location.contentType));
+        res.set('Content-Type', String(location.contentType))
         res.set('Content-Length', String(location.contentLength))
-        downloadStream.pipe(res);
+        downloadStream.pipe(res)
 
         downloadStream.on('finish', () => {
             res.status(200).end()
         })
     } catch(err) {
         console.error(err)
-        res.status(500).send('Internal server error');
+        res.status(500).send('Internal server error')
     }
 })
 
 locationRouter.post('/upload-image/:location', upload.single('image'), async (req: Request, res: Response) => {
     try {
-        const conn = mongoose.connection;
-        const bucket = new mongoose.mongo.GridFSBucket(conn.db, {bucketName: 'locationImages'});
+        const conn = mongoose.connection
+        const bucket = new mongoose.mongo.GridFSBucket(conn.db, {bucketName: 'locationImages'})
 
         const [fileType, fileExt] = req.file.mimetype.split('/')
         const location = req.params.location
         const fileName = `${location}.${fileExt}`
-        const uploadStream = bucket.openUploadStream(fileName);
-        const readableStream = new Readable();
+        const uploadStream = bucket.openUploadStream(fileName)
+        const readableStream = new Readable()
 
-        readableStream.push(req.file.buffer);
-        readableStream.push(null);
+        readableStream.push(req.file.buffer)
+        readableStream.push(null)
 
-        readableStream.pipe(uploadStream);
+        readableStream.pipe(uploadStream)
 
         uploadStream.on('finish', async () => {
             // Create a new Image document
@@ -75,17 +118,17 @@ locationRouter.post('/upload-image/:location', upload.single('image'), async (re
                 imageFileName: fileName,
                 contentType: req.file.mimetype,
                 contentLength: req.file.size
-            });
+            })
 
             // Save the Data URL to MongoDB
-            await newImage.save();
+            await newImage.save()
 
-            res.status(201).send('Image uploaded successfully');
-        });
+            res.status(201).send('Image uploaded successfully')
+        })
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal server error');
+        console.error(error)
+        res.status(500).send('Internal server error')
     }
-});
+})
 
-export default locationRouter;
+export default locationRouter
