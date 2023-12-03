@@ -1,4 +1,4 @@
-// tslint:disable:*
+
 
 import ManifestItem from '@/models/manifest-item'
 import express, { Request, Response } from 'express'
@@ -12,6 +12,21 @@ import mimeTypes from 'mime-types'
 const locationRouter = express.Router()
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
+
+locationRouter.get('/', async (req: Request, res: Response) => {
+    try {
+        const results = await Location.find({}, { 'location': 1 })
+
+        if (results) {
+            res.status(200).json(results.sort())
+        } else {
+            res.status(204).end()
+        }
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: 'Internal server error' })
+    }
+})
 
 locationRouter.get('/:id', async (req: Request, res: Response) => {
     try {
@@ -33,12 +48,9 @@ const uploadImage = async (location: string, file: any) => {
     const conn = mongoose.connection
     const bucket = new mongoose.mongo.GridFSBucket(conn.db, { bucketName: 'locationImages' })
 
-    const [fileType, fileExt] = file.mimetype.split('/')
-    const fileName = `${location}.${fileExt}`
-
     // Use Promises and async/await for better readability
     return new Promise((resolve, reject) => {
-        const uploadStream = bucket.openUploadStream(fileName)
+        const uploadStream = bucket.openUploadStream(file.originalname)
         const readableStream = new Readable()
 
         readableStream.push(file.buffer)
@@ -51,7 +63,7 @@ const uploadImage = async (location: string, file: any) => {
                 // Create a new Image document
                 const newImage = new Location({
                     location,
-                    imageFileName: fileName,
+                    imageFileName: file.originalname,
                     contentType: file.mimetype,
                     contentLength: file.size,
                 })
@@ -128,6 +140,18 @@ locationRouter.post('/upload-image/:location', upload.single('image'), async (re
     } catch (error) {
         console.error(error)
         res.status(500).send('Internal server error')
+    }
+})
+
+locationRouter.post('/new', upload.single('file'), async (req, res) => {
+    console.log(req.body.location, req.file)
+    try {
+        await uploadImage(req.body.location, req.file)
+
+        res.status(201).send('Image uploaded successfully')
+    } catch (error) {
+        console.error(error)
+        res.status(500).send(error)
     }
 })
 

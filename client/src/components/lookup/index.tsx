@@ -24,9 +24,6 @@ const Lookup: React.FC = () => {
             <div className="lookup-comp">
                 <LookupForm />
                 <LookupResults />
-                <div className="bottom bg-slate-500 p-2 flex flex-row items-center justify-center">
-                    <Link to={'/location/add'} className="border rounded-md p-1"><FaPlus className="text-xl font-semibold text-slate-300 mr-2 inline-block" /><span className="text-lg font-semibold text-slate-300">Add New Location</span></Link>
-                </div>
             </ div>
         </LookupProvider>
     )

@@ -13,7 +13,7 @@ const Location: React.FC = () => {
     return (
         <LocationProvider id={id}>
             <div className="abs-container flex flex-col items-stretch justify-stretch">
-                <div className="top bg-slate-500 p-2 flex flex-row items-stretch justify-stretch"><Link to={'/'}><FaChevronLeft className=" text-3xl font-semibold text-slate-300 border rounded-md p-1" /></Link><span className="flex-1 text-xl font-bold text-slate-300 ml-2">Viewing Location: {id}</span></div>
+                <div className="top bg-slate-500 p-2 flex flex-row items-stretch justify-stretch"><button type='button' onClick={() => history.back()}><FaChevronLeft className=" text-3xl font-semibold text-slate-300 border rounded-md p-1" /></button><span className="flex-1 text-xl font-bold text-slate-300 ml-2">Viewing Location: {id}</span></div>
                 <div className="top p-4 min-h-lg"><img className="" src={`${appConfig.rootServerUrl}/location/image/${id}`} /></div>
                 <div className="middle relative">
                     <LocationItems />
