@@ -1,4 +1,5 @@
 #!/bin/bash
+export REMOTE_SERVER=gochinj@razzie1.gochin.home
 
 # Full build
 ./build.sh
