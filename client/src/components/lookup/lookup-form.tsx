@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import axios from 'axios'
+import axios from 'axiosInstance'
 import { useAppContext } from '../../AppContext'
 import { useLookupContext } from './lookup-context'
 import { FaPlus, FaTableList } from 'react-icons/fa6'

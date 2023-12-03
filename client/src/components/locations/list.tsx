@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useAppContext } from 'AppContext'
-import axios from 'axios'
+import axios from 'axiosInstance'
 import { Link } from 'react-router-dom'
 
 const LocationsList: React.FC = () => {

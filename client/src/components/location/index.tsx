@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, Outlet, useLocation, useParams } from 'react-router-dom'
 import { FaChevronLeft, FaPlus } from "react-icons/fa6"
-import axios from 'axios'
+import axios from 'axiosInstance'
 import LocationItems from './items'
 import { useAppContext } from 'AppContext'
 import { LocationProvider, useLocationContext } from './location-context'

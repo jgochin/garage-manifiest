@@ -1,5 +1,5 @@
 import { useAppContext } from 'AppContext'
-import axios from 'axios'
+import axios from 'axiosInstance'
 import { createContext, useContext, useState, ReactNode, Dispatch, SetStateAction, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 

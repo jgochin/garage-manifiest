@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { FaChevronLeft, FaPlus } from "react-icons/fa6"
-import axios from 'axios'
+import axios from 'axiosInstance'
 import { useAppContext } from 'AppContext'
 
 const LocationAdd: React.FC = () => {
