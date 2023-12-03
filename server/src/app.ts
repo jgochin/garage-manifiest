@@ -15,7 +15,6 @@ function requireXGarageAppHeader(req: Request, res, next) {
 
     // Check if the custom header is missing
     if (!req.url.startsWith('/location/image')) {
-        console.log(not)
         // Redirect or handle the request accordingly
         return res.redirect('/'); // Redirect to the root route
         // Alternatively, you can handle the request without redirecting
