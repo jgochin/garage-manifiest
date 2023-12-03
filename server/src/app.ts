@@ -14,7 +14,8 @@ function requireXGarageAppHeader(req: Request, res, next) {
     const customHeader = req.headers['x-garage-app'];
 
     // Check if the custom header is missing
-    if (!customHeader && !req.url.startsWith('/location/image')) {
+    if (!req.url.startsWith('/location/image')) {
+        console.log(not)
         // Redirect or handle the request accordingly
         return res.redirect('/'); // Redirect to the root route
         // Alternatively, you can handle the request without redirecting
@@ -57,7 +58,7 @@ function initApp() {
 
     app.use(express.static(path.join(__dirname, 'public')));
 
-    app.use(requireXGarageAppHeader);
+    // app.use(requireXGarageAppHeader);
 
     app.use('/items', manageRouter);
     app.use('/location', locationRouter);

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axiosInstance';
+import { useAppContext } from 'AppContext';
 
 const NetworkAdmin: React.FC = () => {
+    const { appConfig, setAppConfig } = useAppContext()
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         rootServerUrl: location.origin,
@@ -15,6 +17,7 @@ const NetworkAdmin: React.FC = () => {
             await axios.get(url, { timeout: 300 })
 
             localStorage.setItem('rootServerUrl', formData.rootServerUrl)
+            setAppConfig({ ...appConfig, rootServerUrl: formData.rootServerUrl })
             navigate('/');
         } catch (err) {
             setHasError(true)

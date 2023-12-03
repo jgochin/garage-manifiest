@@ -94,6 +94,10 @@
     }
 }
 
+.location-img {
+    flex-shrink: 50%
+}
+
 .btn {
     @apply font-bold px-2;
 
