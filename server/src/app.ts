@@ -10,6 +10,21 @@ import path from 'path'
 
 const config = useConfig()
 
+function requireXGarageAppHeader(req: Request, res, next) {
+    const customHeader = req.headers['x-garage-app'];
+
+    // Check if the custom header is missing
+    if (!req.url.startsWith('/location/image')) {
+        // Redirect or handle the request accordingly
+        return res.redirect('/'); // Redirect to the root route
+        // Alternatively, you can handle the request without redirecting
+        // res.status(403).send('Custom header is missing'); 
+    }
+
+    // Custom header is present, proceed to the next middleware or route
+    next();
+}
+
 async function initDb() {
     try {
         console.log('Connecting to DB', config.mongo.url)
@@ -42,11 +57,13 @@ function initApp() {
 
     app.use(express.static(path.join(__dirname, 'public')));
 
+    // app.use(requireXGarageAppHeader);
+
     app.use('/items', manageRouter);
     app.use('/location', locationRouter);
     app.use('/search', searchRouter);
     
-    app.get('/', (req, res) => {
+    app.get('/', (req: Request, res) => {
         res.sendFile(path.join(__dirname, 'public', 'index.html'));
     });
 

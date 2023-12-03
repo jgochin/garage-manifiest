@@ -1,4 +1,5 @@
 import Location from '@app/location';
+import Locations from '@app/locations'
 import Lookup from '@app/lookup';
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -11,8 +12,9 @@ const AppRouter: React.FC = () => {
             <Routes>
                 <Route path="/" index element={<Lookup />} />
                 <Route path="/admin/network" element={<NetworkAdmin />} />
-                <Route path="/location/add" element={<LocationAdd />} />
                 <Route path="/location/:id" element={<Location />} />
+                <Route path="/locations" element={<Locations />} />
+                <Route path="/locations/add" element={<LocationAdd />} />
                 <Route path="*" element={<Lookup />} />
             </Routes>
         </Router>

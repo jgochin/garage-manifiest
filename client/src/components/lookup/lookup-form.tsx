@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
-import axios from 'axios'
+import axios from 'axiosInstance'
 import { useAppContext } from '../../AppContext'
 import { useLookupContext } from './lookup-context'
+import { FaPlus, FaTableList } from 'react-icons/fa6'
+import { Link } from 'react-router-dom'
 
 const LookupForm: React.FC = () => {
     const { appConfig, setAppConfig } = useAppContext()
@@ -26,7 +28,12 @@ const LookupForm: React.FC = () => {
 
     return (
         <div>
-            <div className="bg-slate-500 p-2 mb-4 top"><h2 className="text-xl font-semibold text-slate-300">What are you looking for?</h2></div>
+            <div className="bg-slate-500 p-2 mb-4 top flex flex-row justify-between items-center">
+                <h2 className="text-xl font-semibold text-slate-300">What are you looking for?</h2>
+                <div className="bottom bg-slate-500 p-2 flex flex-row items-center justify-center">
+                    <Link to={'/locations'} className="border rounded-md p-1 text-center"><FaTableList className="font-semibold text-slate-300 inline-block" /></Link>
+                </div>
+            </div>
             <form className="form" onSubmit={(e) => search(e)}>
                 <div className="lookup-form">
                     <div className="flex flex-row">
