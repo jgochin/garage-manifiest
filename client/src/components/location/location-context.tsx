@@ -34,10 +34,10 @@ export const LocationProvider: React.FC<{ children: ReactNode, id: string }> = (
 
         getLocationItems()
 
-        return () => {
-            console.log('Component will unmount or dependencies change')
-            // You can perform cleanup here (e.g., cancel subscriptions)
-        }
+        // return () => {
+        //     console.log('Component will unmount or dependencies change')
+        //     // You can perform cleanup here (e.g., cancel subscriptions)
+        // }
     }, [])
 
     return (

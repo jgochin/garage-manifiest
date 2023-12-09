@@ -1,17 +1,19 @@
 import React from 'react'
 import { useLocationContext } from './location-context'
+import { FaPen, FaTrash } from 'react-icons/fa6'
 
 const LocationItems: React.FC = () => {
     const { location } = useLocationContext()
     const items = location.items
 
     return (
-        <div className="location-items">
-            <div className="header">Items</div>
-            <div className="list">
+        <div className="items">
+            <div className="scroll-container">
                 {items.length > 0 ? (
                     items.map((item, index) => (
-                        <div className="cell" key={index}>{item}</div>
+                        <div className="row" key={index}>
+                            <span className="col-1">{item}</span><span className="col-2"><span className="btn"><FaPen className="text-blue-500" /></span><span className="btn"><FaTrash className="text-red-500" /></span></span>
+                        </div>
                     ))
                 ) : (
                     <p>No results to display.</p>

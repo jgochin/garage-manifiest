@@ -2,9 +2,10 @@ import React, { useEffect } from 'react'
 import LookupForm from './lookup-form'
 import LookupResults from './lookup-results'
 import { LookupProvider } from './lookup-context'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAppContext } from 'AppContext'
 import axiosInstance from 'axiosInstance'
+import { FaTableList } from 'react-icons/fa6'
 
 const Lookup: React.FC = () => {
     const { appConfig } = useAppContext()
@@ -26,9 +27,16 @@ const Lookup: React.FC = () => {
 
     return (
         <LookupProvider>
-            <div className="lookup-comp">
-                <LookupForm />
-                <LookupResults />
+            <div className="lookup-component">
+                <div className="header">
+                    <div className="spacer"></div>
+                    <div>What are you looking for?</div>
+                    <Link to={'/locations'}><FaTableList className="" /></Link>
+                </div>
+                <div className="body">
+                    <LookupForm />
+                    <LookupResults />
+                </div>
             </ div>
         </LookupProvider>
     )

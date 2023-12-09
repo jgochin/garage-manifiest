@@ -1,0 +1,105 @@
+.location-component {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    display: flex;
+    flex-direction: column;
+
+
+    .header {
+        @apply bg-slate-300;
+
+        font-size: 1.2em;
+        font-weight: bold;
+        flex: 0 auto;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: .3em;
+        color: black;
+
+        @media screen and (max-width: 400px) {
+            font-size: .9em;
+        }
+
+        button,
+        a {
+            @apply border rounded-md bg-slate-500;
+
+            padding: .4em;
+            color: white;
+        }
+
+        span {
+            margin-right: .4em;
+            margin-left: .4em;
+        }
+    }
+
+    .body {
+        flex: 1 auto;
+        display: flex;
+        flex-direction: column;
+
+        .img-container {
+            flex: 1 auto;
+            position: relative;
+            padding: .8em;
+            overflow: auto;
+            max-height: 50%;
+        }
+
+        .items {
+            flex: 1 auto;
+            position: relative;
+            max-height: 50%;
+            overflow: auto;
+
+            .scroll-container {
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                overflow-y: scroll;
+                .row {
+                    @apply border border-slate-200;
+
+                    padding: .2em;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    .col-1 {
+                        flex: 1 auto;
+                        cursor: default;
+                    }
+
+                    .col-2 {
+                        flex: 0 auto;
+                        display: flex;
+                        flex-direction: row;
+
+                        .btn {
+                            @apply border rounded-md bg-slate-200;
+
+                            cursor: pointer;
+                            padding: .4em;
+                            margin-left: .2em;
+                            color: white;
+                        }
+                    }
+                }
+            }
+        }
+
+        //  {
+        //     // position: absolute;
+        // }
+    }
+
+    >.footer {}
+}

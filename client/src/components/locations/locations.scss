@@ -1,0 +1,61 @@
+.locations-component {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    display: flex;
+    flex-direction: column;
+
+
+    .header {
+        @apply bg-slate-300;
+
+        font-size: 1.2em;
+        font-weight: bold;
+        flex: 0 auto;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: .3em;
+        color: black;
+
+        @media screen and (max-width: 400px) {
+            font-size: .9em;
+        }
+
+        button,
+        a {
+            @apply border rounded-md bg-slate-500;
+
+            padding: .4em;
+            color: white;
+        }
+
+        span {
+            margin-right: .4em;
+            margin-left: .4em;
+        }
+    }
+
+    .body {
+        flex: 1 auto;
+        display: flex;
+        flex-direction: column;
+
+        .items {
+            position: relative;
+            padding: .8em;
+            overflow: auto;
+            flex: 1 1 auto
+        }
+
+        //  {
+        //     // position: absolute;
+        // }
+    }
+
+    >.footer {}
+}

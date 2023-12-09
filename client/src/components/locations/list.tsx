@@ -14,9 +14,9 @@ const LocationsList: React.FC = () => {
                 const rsp = await axios.get(url)
 
                 setLocations(rsp.data)
-                console.log(rsp)
             } catch (err) {
                 console.error(err)
+                setLocations([])
             }
         }
 
@@ -25,8 +25,8 @@ const LocationsList: React.FC = () => {
     }, [])
 
     return (
-        <div className="location-items">
-            <div className="list">
+        <div className="items">
+            <div>
                 {locations.length > 0 ? (
                     locations.map((item, index) => (
                         <div className="cell" key={item._id}><Link to={`/location/${item.location}`}>{item.location}</Link></div>

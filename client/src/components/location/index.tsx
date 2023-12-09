@@ -12,14 +12,21 @@ const Location: React.FC = () => {
 
     return (
         <LocationProvider id={id}>
-            <div className="abs-container flex flex-col items-stretch justify-stretch">
-                <div className="top bg-slate-500 p-2 flex flex-row items-stretch justify-stretch"><button type='button' onClick={() => history.back()}><FaChevronLeft className=" text-3xl font-semibold text-slate-300 border rounded-md p-1" /></button><span className="flex-1 text-xl font-bold text-slate-300 ml-2">Location {id}</span></div>
-                <div className="top p-4 min-h-lg"><img className="location-img" src={`${appConfig.rootServerUrl}/location/image/${id}`} /></div>
-                <div className="middle relative">
-                    <LocationItems />
+            <div className="location-component">
+                <div className="header">
+                    <button type='button' onClick={() => history.back()}>
+                        <FaChevronLeft className="icon" />
+                    </button>
+                    <span>Location {id}</span>
+                    <Link to={'/location/add-item'}><FaPlus /></Link>
                 </div>
-                <div className="bottom bg-slate-500 p-2 m-1 flex flex-row items-center justify-center">
-                    <Link to={'/location/add-item'} className="border rounded-md p-1"><FaPlus className="text-xl font-semibold text-slate-300 mr-2 inline-block" /><span className="text-lg font-semibold text-slate-300">New Item</span></Link>
+                <div className="body">
+                    <div className="img-container">
+                        <div className="">
+                            <img className="" src={`${appConfig.rootServerUrl}/location/image/${id}`} />
+                        </div>
+                    </div>
+                    <LocationItems />
                 </div>
             </div>
         </LocationProvider>

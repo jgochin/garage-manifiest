@@ -1,24 +1,27 @@
 import React from 'react';
 import { useLookupContext } from './lookup-context';
-import { Link } from 'react-router-dom';
+import { FaEye } from 'react-icons/fa6'
+import { useNavigate } from 'react-router-dom';
 
 const LookupResults: React.FC = () => {
     const { lookupData } = useLookupContext();
+    const navigate = useNavigate()
 
     return (
-        <div className="lookup-results mr-4 ml-4">
-            {lookupData.searchResults.length > 0 ? (<table className="min-w-full">
+        <div className="lookup-results">
+            {lookupData.searchResults.length > 0 ? (<table className="items">
                 <thead>
-                    <tr className="bg-slate-300">
-                        <th className="header col-1">Item</th>
-                        <th className="header col-2">Location</th>
+                    <tr>
+                        <th className="col-1">Item</th>
+                        <th className="col-2">Location</th>
                     </tr>
                 </thead>
                 <tbody>
                     {lookupData.searchResults.map((item) => (
                         <tr key={item.hash}>
-                            <td className="cell col-1">{item.item}</td>
-                            <td className="cell col-2 whitespace-nowrap text-center"><Link to={`/location/${item.location}`}>{item.location}</Link></td>
+                            <td>{item.item}</td>
+                            <td className="col-2" onClick={() => navigate(`/location/${item.location}`)}>
+                                <span>{item.location}<FaEye /></span></td>
                         </tr>
                     ))
                     }

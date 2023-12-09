@@ -24,101 +24,139 @@
     }
 }
 
-.lookup-comp {
-    @apply flex flex-col items-stretch;
+// .lookup-comp {
+//     @apply flex flex-col items-stretch;
 
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
+//     position: absolute;
+//     left: 0;
+//     right: 0;
+//     top: 0;
+//     bottom: 0;
 
-    .lookup-form {
-        @apply flex flex-col self-center px-4;
-    }
+//     .lookup-form {
+//         @apply flex flex-col self-center px-4;
+//     }
 
-    .lookup-results {
-        @apply mt-4;
+//     .lookup-results {
+//         @apply mt-4;
 
-        position: relative;
-        flex: 1 auto;
+//         position: relative;
+//         flex: 1 auto;
 
-        .col-1 {
-            width: 75%;
-        }
+//         .col-1 {
+//             width: 75%;
+//         }
 
-        .col-2 {
-            width: 25%;
-        }
+//         .col-2 {
+//             width: 25%;
+//         }
 
-        .header {
-            @apply border border-slate-600 px-4 py-2 bg-slate-300 text-center p-1 text-lg;
-        }
+//         .header {
+//             @apply border border-slate-600 px-4 py-2 bg-slate-300 text-center p-1 text-lg;
+//         }
 
-        .cell {
-            @apply border border-slate-300 px-4 py-2;
-        }
-    }
-}
+//         .cell {
+//             @apply border border-slate-300 px-4 py-2;
+//         }
+//     }
+// }
 
-.location-items {
-    @apply p-4 pt-0;
+// .location-items {
+//     @apply p-4 pt-0;
 
-    overflow-y: hidden;
+//     overflow-y: hidden;
 
-    .list {
-        @apply border border-slate-600 m-4 mt-0;
+//     .item-list {
+//         padding: 1rem;
+//         padding-top: 0px;
+//         overflow-y: hidden;
+//         position: absolute;
+//         top: 200px;
+//         bottom: 0;
+//         left: 0;
+//         right: 0;
+//     }
 
-        position: absolute;
-        top: 46px;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        overflow-y: scroll;
-    }
+//     .list {
+//         @apply border border-slate-600 m-4 mt-0;
 
-    .col-1 {
-        width: 75%;
-    }
+//         position: absolute;
+//         top: 46px;
+//         left: 0;
+//         bottom: 0;
+//         right: 0;
+//         overflow-y: scroll;
+//     }
 
-    .col-2 {
-        width: 25%;
-    }
+//     .col-1 {
+//         width: 75%;
+//     }
 
-    .header {
-        @apply border border-slate-600 px-4 py-2 bg-slate-300 text-center p-1 text-lg;
-    }
+//     .col-2 {
+//         width: 25%;
+//     }
 
-    .cell {
-        @apply border border-slate-300 px-4 py-2;
-    }
-}
+//     .header {
+//         @apply border border-slate-600 px-4 py-2 bg-slate-300 text-center p-1 lg:text-lg sm:text-sm;
+//     }
 
-.location-img {
-    flex-shrink: 50%
-}
+//     .cell {
+//         @apply border border-slate-300 px-4 py-2;
+//     }
+// }
 
-.btn {
-    @apply font-bold px-2;
+// .location-img {
+//     flex-shrink: 50%
+// }
 
-    &-blue {
-        @apply bg-blue-500 text-white;
-    }
+// .btn {
+//     @apply font-bold px-2;
 
-    &-blue:hover {
-        @apply bg-blue-700;
-    }
+//     &-blue {
+//         @apply bg-blue-500 text-white;
+//     }
 
-    &-blue:disabled {
-        cursor: not-allowed;
-        @apply bg-blue-300 text-slate-400;
-    }
-}
+//     &-blue:hover {
+//         @apply bg-blue-700;
+//     }
 
-.label {
-    @apply text-gray-500 font-bold text-left mb-2 md:mb-0 pr-4 whitespace-nowrap;
-}
+//     &-blue:disabled {
+//         cursor: not-allowed;
+//         @apply bg-blue-300 text-slate-400;
+//     }
+// }
+
+// .label {
+//     @apply text-gray-500 font-bold text-left mb-2 md:mb-0 pr-4 whitespace-nowrap;
+// }
 
 .text-input {
     @apply border-2 border-gray-200 w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-slate-400
 }
+
+// .img-holder {
+//     top: 16px;
+//     bottom: 2px;
+//     overflow: scroll;
+//     margin-left: 2px;
+//     margin-right: 14px;
+//     margin-bottom: 14px;
+//     position: absolute;
+// }
+
+// .img-holder2 {
+//     top: 180px;
+//     bottom: 100px;
+//     overflow: scroll;
+//     margin-left: 14px;
+//     margin-right: 14px;
+//     margin-bottom: 14px;
+//     position: absolute;
+// }
+
+// .img-name {
+//     min-height: 2.2em;
+//     margin-left: 14px;
+//     margin-right: 14px;
+// }
+
