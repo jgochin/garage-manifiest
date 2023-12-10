@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { useAppContext } from 'AppContext'
-import axios from 'axiosInstance'
 import { Link } from 'react-router-dom'
+import { DataProviderApi, ILocation, useDataProvider } from 'data-provider-api'
 
 const LocationsList: React.FC = () => {
+    const dataApi: DataProviderApi = useDataProvider()
     const [locations, setLocations] = useState([])
-    const { appConfig } = useAppContext()
 
     useEffect(() => {
         const getLocations = async () => {
             try {
-                const url = appConfig.rootServerUrl + '/location'
-                const rsp = await axios.get(url)
+                const locationResults: ILocation[] = await dataApi.locations()
 
-                setLocations(rsp.data)
+                setLocations(locationResults)
             } catch (err) {
                 console.error(err)
                 setLocations([])

@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
-import axios from 'axiosInstance'
 import { useAppContext } from '../../AppContext'
 import { useLookupContext } from './lookup-context'
 import { FaSearchengin } from 'react-icons/fa6'
-import { Link } from 'react-router-dom'
+import { DataProviderApi, IManifestItem, useDataProvider } from 'data-provider-api'
 
 const LookupForm: React.FC = () => {
+    const dataApi: DataProviderApi = useDataProvider()
     const { appConfig, setAppConfig } = useAppContext()
     const { lookupData, setLookupData } = useLookupContext()
 
@@ -13,10 +13,9 @@ const LookupForm: React.FC = () => {
         if (e) e.preventDefault()
 
         try {
-            const url = `${appConfig.rootServerUrl}/search/${appConfig.searchCriteria}`
-            const results = await axios.get(url)
+            const searchResults: IManifestItem[] = await dataApi.search(appConfig.searchCriteria)
 
-            setLookupData({ ...lookupData, ...{ searchResults: results.data } })
+            setLookupData({ ...lookupData, ...{ searchResults } })
         } catch (err) {
             setLookupData({ ...lookupData, ...{ searchResults: [] } })
         }

@@ -6,7 +6,7 @@ import multer from 'multer'
 import Location from '@/models/locations'
 import { Readable } from 'stream'
 import mongoose, { ObjectId } from 'mongoose'
-import { ILocation } from '@/models/types'
+import { ILocation, IManifestItem } from '@/models/types'
 
 const locationRouter = express.Router()
 const storage = multer.memoryStorage()
@@ -104,7 +104,12 @@ locationRouter.get('/:id', async (req: Request, res: Response) => {
         const results = await ManifestItem.find({ location: id })
 
         if (results) {
-            res.status(200).json(results.map(location => location.item).sort())
+            res.status(200).json(results.sort((a: IManifestItem, b: IManifestItem) => {
+                if(a.item < b.item) return 1
+                if (a.item < b.item) return -1
+
+                return 0
+            }))
         } else {
             res.status(204).end()
         }

@@ -1,10 +1,12 @@
 import { useAppContext } from 'AppContext'
-import axios from 'axiosInstance'
 import { createContext, useContext, useState, ReactNode, Dispatch, SetStateAction, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { ILocationItem, LOCATION_UI_STATE } from './item'
+import { DataProviderApi, useDataProvider } from 'data-provider-api'
 
 export interface ILocationData {
-    items: any[]
+    items: ILocationItem[]
+    name: string
+    isEditMode: boolean
 }
 
 export interface ILocationContext {
@@ -17,16 +19,15 @@ const LocationContext = createContext<ILocationContext | undefined>(undefined)
 
 // Create a provider component
 export const LocationProvider: React.FC<{ children: ReactNode, id: string }> = ({ children, id }) => {
-    const [location, setLocation] = useState<ILocationData>({ items: [] })
-    const { appConfig } = useAppContext()
+    const dataApi: DataProviderApi = useDataProvider()
+    const [location, setLocation] = useState<ILocationData>({ name: id, items: [], isEditMode: false })
 
     useEffect(() => {
         const getLocationItems = async () => {
             try {
-                const url = `${appConfig.rootServerUrl}/location/${id}`
-                const results = await axios.get(url)
+                const locationItems: ILocationItem[] = await dataApi.location(id)
 
-                setLocation({ ...location, items: results.data })
+                setLocation({ ...location, items: locationItems })
             } catch (error) {
                 setLocation({ ...location, items: [] })
             }

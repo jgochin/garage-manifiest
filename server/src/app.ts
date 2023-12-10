@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
-import { manageRouter, searchRouter, locationRouter } from '@/routes';
+import { manageRouter, searchRouter, locationRouter, itemRouter } from '@/routes';
 import mongoose, { ConnectOptions } from 'mongoose';
 import configureAppSecurity from "@/app-security"
 import useConfig from '@/config'
@@ -62,6 +62,7 @@ function initApp() {
     app.use('/items', manageRouter);
     app.use('/location', locationRouter);
     app.use('/search', searchRouter);
+    app.use('/item', itemRouter);
     
     app.get('/', (req: Request, res) => {
         res.sendFile(path.join(__dirname, 'public', 'index.html'));

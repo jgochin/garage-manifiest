@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { Link, Outlet, useLocation, useParams } from 'react-router-dom'
+import React, { useRef } from 'react'
+import { useParams } from 'react-router-dom'
 import { FaChevronLeft, FaPlus } from "react-icons/fa6"
-import axios from 'axiosInstance'
-import LocationItems from './items'
+import LocationItems, { LocationItemsRef } from './items'
 import { useAppContext } from 'AppContext'
-import { LocationProvider, useLocationContext } from './location-context'
+import { LocationProvider } from './location-context'
 
 const Location: React.FC = () => {
     const { appConfig } = useAppContext()
+    const locationItemsRef = useRef<LocationItemsRef>(null);
     const { id } = useParams()
 
     return (
@@ -18,7 +18,11 @@ const Location: React.FC = () => {
                         <FaChevronLeft className="icon" />
                     </button>
                     <span>Location {id}</span>
-                    <Link to={'/location/add-item'}><FaPlus /></Link>
+                    <button type="button" onClick={() => {
+                        if (locationItemsRef.current) {
+                            locationItemsRef.current.addNewItem();
+                        }
+                    }}><FaPlus /></button>
                 </div>
                 <div className="body">
                     <div className="img-container">
@@ -26,7 +30,7 @@ const Location: React.FC = () => {
                             <img className="" src={`${appConfig.rootServerUrl}/location/image/${id}`} />
                         </div>
                     </div>
-                    <LocationItems />
+                    <LocationItems ref={locationItemsRef} />
                 </div>
             </div>
         </LocationProvider>

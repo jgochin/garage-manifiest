@@ -4,19 +4,19 @@ import LookupResults from './lookup-results'
 import { LookupProvider } from './lookup-context'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAppContext } from 'AppContext'
-import axiosInstance from 'axiosInstance'
 import { FaTableList } from 'react-icons/fa6'
+import { DataProviderApi, useDataProvider } from 'data-provider-api'
 
 const Lookup: React.FC = () => {
     const { appConfig } = useAppContext()
     const navigate = useNavigate()
 
     useEffect(() => {
-        const testServerConnection = async () => {
-            const url = `${appConfig.rootServerUrl}/heartbeat`
+        const dataApi: DataProviderApi = useDataProvider(appConfig.rootServerUrl)
 
+        const testServerConnection = async () => {
             try {
-                await axiosInstance.get(url)
+                await dataApi.heartbeat()
             } catch (err) {
                 navigate('/admin/network')
             }

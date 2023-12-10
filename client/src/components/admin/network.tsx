@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axiosInstance';
 import { useAppContext } from 'AppContext';
+import { DataProviderApi, useDataProvider } from 'data-provider-api';
 
 const NetworkAdmin: React.FC = () => {
+    const dataApi: DataProviderApi = useDataProvider()
     const { appConfig, setAppConfig } = useAppContext()
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -13,8 +14,7 @@ const NetworkAdmin: React.FC = () => {
 
     const save = async (e) => {
         try {
-            const url = `${formData.rootServerUrl}/heartbeat`
-            await axios.get(url, { timeout: 300 })
+            await dataApi.heartbeat()
 
             localStorage.setItem('rootServerUrl', formData.rootServerUrl)
             setAppConfig({ ...appConfig, rootServerUrl: formData.rootServerUrl })
