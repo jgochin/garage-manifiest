@@ -14,10 +14,12 @@ const NetworkAdmin: React.FC = () => {
 
     const save = async (e) => {
         try {
+            dataApi.rootServerUrl = formData.rootServerUrl
             await dataApi.heartbeat()
 
             localStorage.setItem('rootServerUrl', formData.rootServerUrl)
             setAppConfig({ ...appConfig, rootServerUrl: formData.rootServerUrl })
+            
             navigate('/');
         } catch (err) {
             setHasError(true)

@@ -13,9 +13,10 @@ export interface ILocation {
 }
 
 export class DataProviderApi {
-    constructor(private rootServerUrl: string) { }
+    constructor(public rootServerUrl: string) { }
 
     heartbeat() {
+        console.log(this.rootServerUrl)
         const url = `${this.rootServerUrl}/heartbeat`
 
         return axiosInstance.get(url, { timeout: 300 })
@@ -82,10 +83,6 @@ export class DataProviderApi {
 let dataProviderApi: DataProviderApi = null
 
 export function useDataProvider(rootServerUrl?: string) {
-    if(!rootServerUrl) {
-        rootServerUrl = localStorage.getItem('rootServerUrl')
-    }
-
     if (!dataProviderApi) dataProviderApi = new DataProviderApi(rootServerUrl)
 
     return dataProviderApi
