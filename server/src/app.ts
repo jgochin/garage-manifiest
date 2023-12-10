@@ -51,6 +51,11 @@ function initApp() {
     app.use(bodyParser.text())
     app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded request bodies
 
+    app.use((req, res, next) => {
+        res.setHeader('Cache-Control', 'no-store');
+        next();
+    });
+    
     app.get('/heartbeat', (req: Request, res: Response): any => {
         res.status(200).send('OK').end()
     });
