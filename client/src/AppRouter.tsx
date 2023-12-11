@@ -4,7 +4,7 @@ import Lookup from '@app/lookup';
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NetworkAdmin from '@app/admin/network';
-import LocationAdd from '@app/admin/add-location';
+import LocationAdd from '@app/locations/add';
 
 const AppRouter: React.FC = () => {
     return (

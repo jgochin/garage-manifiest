@@ -22,7 +22,7 @@ const LocationAdd: React.FC = () => {
     const handleChange = (e) => {
         const newFormData = { ...formData, [e.target.name]: e.target.value }
         const locationImageName = formData.file ? newFormData.locationName + '.' + formData.file.type.split('/')[1] : ''
-        
+
         newFormData.locationImageName = locationImageName
         console.log('handleChange', newFormData)
 
@@ -63,7 +63,7 @@ const LocationAdd: React.FC = () => {
         try {
             const rsp = await axios.post(url, requestBody)
 
-            if(rsp.status === 201) {
+            if (rsp.status === 201) {
                 navigate(`/location/${formData.locationName}`)
             }
 
@@ -73,28 +73,35 @@ const LocationAdd: React.FC = () => {
     }
 
     return (
-        <div className="lookup-comp">
-            <div className="top flex-0 bg-slate-500 p-2 flex flex-row"><Link to={'/location'}><FaChevronLeft className="text-xl font-semibold text-slate-300 mt-1 mr-2" /></Link><h2 className="text-xl font-semibold text-slate-300">Add New Location</h2></div>
-            <div className="flex-1 flex flex-col">
-                <form className="form flex-0" onSubmit={(e) => e.preventDefault()}>
+        <div className="locations-component">
+            <div className="header">
+                <button type='button' onClick={() => history.back()}><FaChevronLeft /></button>
+                <span>Add New Location</span>
+                <span className="spacer"></span>
+            </div>
+            <div className="body">
+
+                <form onSubmit={(e) => e.preventDefault()}>
                     <div className="lookup-form mt-4">
-                        <div className="flex flex-row justify-items-stretch">
+                        <div className="control-group">
                             <label className="label self-center">Location Name: </label>
                             <input name="locationName" className="text-input" onChange={handleChange} />
                         </div>
-                        <div className="flex flex-row justify-items-stretch">
+                        <div className="control-group">
                             <label className="label self-center">Location Image: </label>
                             <input name="locationImage" type="file" className="text-input" onChange={handleFileChange} />
                         </div>
                     </div>
                 </form>
-                <div className="img-name">{formData.locationImageName}</div>
-                <div className="abs-container img-holder">
-                    <img className="location-img" src={imagePreview} />
+
+                <div className="img-container">
+                    <div className="scroll-container">
+                        <img src={imagePreview} />
+                    </div>
                 </div>
             </div>
-            <div className="flex-0 bg-slate-500 p-2 flex flex-row items-center justify-center">                  
-                <button type="button" className="btn btn-blue w-20" onClick={() => save()} disabled={isFormInvalid}>Save</button>
+            <div className="footer">
+                <button type="button" onClick={() => save()} disabled={isFormInvalid}>Save</button>
             </div>
         </div>
     );
