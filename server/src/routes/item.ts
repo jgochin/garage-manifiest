@@ -1,16 +1,15 @@
 
 import express, { Request, Response } from 'express'
 import md5 from 'md5'
-import ManifestItem from '@/models/manifest-item'
-import { IManifestItem } from '@/models/types'
+import { deleteManifestItem, newManifestItem, updateManifestItem } from '@/api/manifest'
 
 const itemRouter = express.Router()
 
 itemRouter.post('/', async (req: Request, res: Response) => {
     try {
         const { location, item } = req.body
-        const newItem: IManifestItem = { ...req.body, hash: md5(location + item) }
-        const results = await ManifestItem.insertMany([newItem])
+        const newItem: any = { ...req.body, hash: md5(location + item) }
+        const results = await newManifestItem(newItem)
 
         if (results) {
             res.status(201).end()
@@ -25,9 +24,8 @@ itemRouter.post('/', async (req: Request, res: Response) => {
 
 itemRouter.patch('/', async (req: Request, res: Response) => {
     try {
-        const newItem: IManifestItem = req.body
-        const existingItem: any = await ManifestItem.findOne({hash: newItem.hash})
-        const results = await ManifestItem.updateOne({ _id: existingItem._id }, { item: newItem.item, hash: md5(newItem.location + newItem.item) })
+        const newItem: any = req.body
+        const results = await updateManifestItem(newItem)
 
         if (results) {
             res.status(201).end()
@@ -42,7 +40,7 @@ itemRouter.patch('/', async (req: Request, res: Response) => {
 
 itemRouter.delete('/:hash', async (req: Request, res: Response) => {
     try {
-        await ManifestItem.deleteOne({ hash: req.params.hash })
+        await deleteManifestItem(req.params.hash) 
 
         res.status(201).end()
     } catch(err) {
