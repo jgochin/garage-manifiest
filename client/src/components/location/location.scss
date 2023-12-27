@@ -50,7 +50,32 @@
             position: relative;
             padding: .8em;
             overflow: auto;
-            max-height: 50%;
+            max-height: 50%;            
+
+            .image {
+                width: 100%;
+            }
+
+            .canvas-overlay {
+                position: absolute;
+                top: .7em; left: .7em;
+                z-index: 1000;
+                background-color: transparent;
+                border: 2px solid red;
+            }
+        }
+
+        .img-bar {
+            @apply bg-slate-300;
+
+            font-size: 1.2em;
+            font-weight: bold;
+            flex: 0 auto;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            padding: .2em;
         }
 
         .items {
@@ -96,7 +121,8 @@
                         justify-content: space-between;
                         padding: .2em;
 
-                        button, .btn {
+                        button,
+                        .btn {
                             // @apply border rounded-md bg-slate-200;
 
                             cursor: pointer;

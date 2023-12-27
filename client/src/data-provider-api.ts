@@ -1,3 +1,4 @@
+import { IBoundingBox } from "@app/location/image";
 import { ILocationItem, LOCATION_UI_STATE } from "@app/location/item";
 import axiosInstance from "axiosInstance";
 
@@ -15,11 +16,11 @@ export interface ILocation {
 export class DataProviderApi {
     constructor(public rootServerUrl: string) { }
 
-    heartbeat() {
+    async heartbeat() {
         console.log(this.rootServerUrl)
         const url = `${this.rootServerUrl}/heartbeat`
 
-        return axiosInstance.get(url, { timeout: 300 })
+        return await axiosInstance.get(url, { timeout: 300 })
     }
 
     async location(id: string = ''): Promise<ILocationItem[]> {
@@ -47,7 +48,6 @@ export class DataProviderApi {
         const result: any = await axiosInstance.get(url)
         const searchResultItems: IManifestItem[] = result.data
 
-        console.log(searchResultItems)
         return searchResultItems
     }
 
@@ -66,7 +66,7 @@ export class DataProviderApi {
         }
     }
 
-    async remove(item) {
+    async remove(item): Promise<boolean> {
         const url = `${this.rootServerUrl}/item/${item.hash}`
         
         try {
@@ -75,6 +75,26 @@ export class DataProviderApi {
             return true
         } catch {
             return false
+        }
+    }
+
+    async scanImage(location: string): Promise<any> {
+        const url = `${this.rootServerUrl}/location/image/${location}/analyize`
+        const response = await axiosInstance.get(url)
+
+        if(response.status === 200) {
+            return response.data.boundingBoxes.map((box: any[]) => {
+                console.log(box)
+                const topLeft = box[0]
+                const bottomRight = box[2]
+                const newBox: IBoundingBox = {x: topLeft.x, y: topLeft.y, x2: bottomRight.x, y2: bottomRight.y}
+
+                return newBox
+            })
+        } else {
+            console.error(response)
+
+            return []
         }
     }
 }

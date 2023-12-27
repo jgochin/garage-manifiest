@@ -62,7 +62,7 @@ const getImageStream = (imageFileName: string) => {
     return downloadStream
 }
 
-const getImageBuffer = (fileStream: ReadableStream) => {
+const getImageBuffer = (fileStream: mongoose.mongo.GridFSBucketReadStream): Promise<Buffer> => {
     return new Promise((resolve, reject) => {
         streamToBuffer(fileStream, (err, buffer) => {
             if (err) {

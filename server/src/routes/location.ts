@@ -5,7 +5,8 @@ import multer from 'multer'
 import mongoose, { } from 'mongoose'
 import { ILocation } from '@/models/types'
 import { getLocation, getLocations, getManifestItems, saveLocation } from '@/api/manifest'
-import { deleteImage, findImage, getImageStream, saveImage } from '@/api/image'
+import { deleteImage, findImage, getImageBuffer, getImageStream, saveImage } from '@/api/image'
+import { detectObjectsInImage } from '@/api/vision'
 
 const locationRouter = express.Router()
 const storage = multer.memoryStorage()
@@ -58,6 +59,16 @@ locationRouter.get('/image/:location', async (req: Request, res: Response) => {
         console.error(err)
         res.status(500).send('Internal server error')
     }
+})
+
+locationRouter.get('/image/:location/analyize', async (req: Request, res: Response) => {
+    const location: ILocation = await getLocation(req.params.location)
+    const downloadStream: mongoose.mongo.GridFSBucketReadStream = getImageStream(location.imageFileName)
+    const imageBuff: Buffer = await getImageBuffer(downloadStream)
+
+    const results = await detectObjectsInImage(imageBuff)
+
+    res.status(200).json(results)
 })
 
 locationRouter.post('/upload-image/:location', upload.single('image'), async (req: Request, res: Response) => {
@@ -115,5 +126,6 @@ locationRouter.post('/new', upload.single('file'), async (req, res) => {
         }
     }
 })
+
 
 export default locationRouter
