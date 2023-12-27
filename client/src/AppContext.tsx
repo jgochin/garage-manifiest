@@ -12,7 +12,7 @@ export interface IAppConfig {
 
 // Create a context
 const AppContext = createContext<IAppConfig|undefined>(undefined);
-const rootServerUrl: string = localStorage.getItem('rootServerUrl') || location.origin
+const rootServerUrl: string = localStorage.getItem('rootServerUrl')
 
 // Create a provider component
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {

@@ -14,13 +14,24 @@ export interface ILocation {
 }
 
 export class DataProviderApi {
-    constructor(public rootServerUrl: string) { }
+    _rootServerUrl: string = ''
+    heartbeatUrl: string = ''
+
+    get rootServerUrl() {
+        return this._rootServerUrl
+    }
+
+    set rootServerUrl(url: string) {
+        this._rootServerUrl = `${url}/api`
+        this.heartbeatUrl = `${url}/heartbeat`
+    }
+
+    constructor(rootServerUrl: string) {
+        this.rootServerUrl = rootServerUrl
+    }
 
     async heartbeat() {
-        console.log(this.rootServerUrl)
-        const url = `${this.rootServerUrl}/heartbeat`
-
-        return await axiosInstance.get(url, { timeout: 300 })
+        return await axiosInstance.get(this.heartbeatUrl, { timeout: 300 })
     }
 
     async location(id: string = ''): Promise<ILocationItem[]> {
@@ -33,6 +44,20 @@ export class DataProviderApi {
         })
 
         return locationItems
+    }
+
+    locationImageUrl(location: string): string {
+        return `${this.rootServerUrl}/location/image/${location}`
+    }
+    async saveLocation(requestBody: FormData): Promise<number | Error> {
+        try {
+            const url = `${this.rootServerUrl}/location/new`
+            const rsp = await axiosInstance.post(url, requestBody)
+
+            return rsp.status
+        } catch (err) {
+            return err
+        }
     }
 
     async locations(): Promise<ILocation[]> {
@@ -55,7 +80,7 @@ export class DataProviderApi {
         const url = `${this.rootServerUrl}/item`
         const payload: IManifestItem = { location, item: item.value, hash: item.hash }
 
-        if(item.state === LOCATION_UI_STATE.NEW) {
+        if (item.state === LOCATION_UI_STATE.NEW) {
             await axiosInstance.post(url, payload)
 
             return true
@@ -68,7 +93,7 @@ export class DataProviderApi {
 
     async remove(item): Promise<boolean> {
         const url = `${this.rootServerUrl}/item/${item.hash}`
-        
+
         try {
             await axiosInstance.delete(url)
 
@@ -82,12 +107,12 @@ export class DataProviderApi {
         const url = `${this.rootServerUrl}/location/image/${location}/analyize`
         const response = await axiosInstance.get(url)
 
-        if(response.status === 200) {
+        if (response.status === 200) {
             return response.data.boundingBoxes.map((box: any[]) => {
                 console.log(box)
                 const topLeft = box[0]
                 const bottomRight = box[2]
-                const newBox: IBoundingBox = {x: topLeft.x, y: topLeft.y, x2: bottomRight.x, y2: bottomRight.y}
+                const newBox: IBoundingBox = { x: topLeft.x, y: topLeft.y, x2: bottomRight.x, y2: bottomRight.y }
 
                 return newBox
             })
@@ -102,8 +127,8 @@ export class DataProviderApi {
 // export const 
 let dataProviderApi: DataProviderApi = null
 
-export function useDataProvider(rootServerUrl?: string) {
-    if (!dataProviderApi) dataProviderApi = new DataProviderApi(rootServerUrl)
+export function useDataProvider() {
+    if (!dataProviderApi) dataProviderApi = new DataProviderApi(localStorage.getItem('rootServerUrl'))
 
     return dataProviderApi
 }

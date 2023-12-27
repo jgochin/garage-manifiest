@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { FaChevronLeft, FaPlus } from "react-icons/fa6"
-import axios from 'axiosInstance'
 import { useAppContext } from 'AppContext'
+import { DataProviderApi, useDataProvider } from 'data-provider-api';
 
 const LocationAdd: React.FC = () => {
     const [formData, setFormData] = useState({ locationName: '', locationImageName: '', file: null })
     const [isFormInvalid, setIsFormInvalid] = useState(true)
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const navigate = useNavigate();
-    const { appConfig } = useAppContext()
+    const dataApi: DataProviderApi = useDataProvider()
 
     const validateForm = (newFormData) => {
         const isValid: boolean = newFormData.locationName && newFormData.locationImageName && newFormData.file
@@ -51,19 +51,15 @@ const LocationAdd: React.FC = () => {
     }
 
     const save = async () => {
-
-        const url = appConfig.rootServerUrl + '/location/new'
         const requestBody: FormData = new FormData()
-
-        console.log('save', url, appConfig)
 
         requestBody.append('location', formData.locationName)
         requestBody.append('file', formData.file, formData.locationImageName)
 
         try {
-            const rsp = await axios.post(url, requestBody)
+            const status = await dataApi.saveLocation(requestBody)
 
-            if (rsp.status === 201) {
+            if (status === 201) {
                 navigate(`/location/${formData.locationName}`)
             }
 

@@ -37,9 +37,9 @@ const Location: React.FC = () => {
                 </div>
                 <div className="body">
                     <div className="img-container">
-                        <ImageWithBoundingBoxes boundingBoxes={boundingBoxes} imagePath={`${appConfig.rootServerUrl}/location/image/${id}`} />
+                        <ImageWithBoundingBoxes boundingBoxes={boundingBoxes} imagePath={`${dataApi.locationImageUrl(id)}`} />
                     </div>
-                    <div className="img-bar"><button type="button" onClick={handleScanClick}><RiQrScan2Line /></button></div>
+                    {/* <div className="img-bar"><button type="button" onClick={handleScanClick}><RiQrScan2Line /></button></div> */}
                     <LocationItems ref={locationItemsRef} />
                 </div>
             </div>

@@ -5,6 +5,11 @@ import { useAppContext } from 'AppContext';
 import { FaPlus } from 'react-icons/fa6';
 
 const App: React.FC = () => {
+  // Make sure something is in localstorage for rootServerUrl.
+  if (!localStorage.getItem('rootServerUrl')) {
+    localStorage.setItem('rootServerUrl', location.origin)    
+  }
+
   return (
     <div className="garage-manifest abs-container overflow-hidden">
       <div className="top">
