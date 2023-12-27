@@ -64,10 +64,10 @@ function initApp() {
 
     // app.use(requireXGarageAppHeader);
 
-    app.use('/items', manageRouter);
-    app.use('/location', locationRouter);
-    app.use('/search', searchRouter);
-    app.use('/item', itemRouter);
+    app.use('/api/items', manageRouter);
+    app.use('/api/location', locationRouter);
+    app.use('/api/search', searchRouter);
+    app.use('/api/item', itemRouter);
     
     app.get('/', (req: Request, res) => {
         res.sendFile(path.join(__dirname, 'public', 'index.html'));
