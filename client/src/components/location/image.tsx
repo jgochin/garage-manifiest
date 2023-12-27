@@ -14,45 +14,45 @@ export interface IImageWithBoundingBoxesProps {
 
 const ImageWithBoundingBoxes: React.FC<IImageWithBoundingBoxesProps> = ({ boundingBoxes, imagePath }) => {
     const imgRef = useRef<HTMLImageElement>(null)
-    const canvasRef = useRef<HTMLCanvasElement>(null)
+    // const canvasRef = useRef<HTMLCanvasElement>(null)
 
-    const findRectHandler = (e) => {
-        const canvas = canvasRef.current;
-        const rect = canvas.getBoundingClientRect();
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
-        const clickedBoundingBox = boundingBoxes.find((box) => {
-            return mouseX >= box.x * canvas.width &&
-                mouseX <= box.x2 * canvas.width &&
-                mouseY >= box.y * canvas.height &&
-                mouseY <= box.y2 * canvas.height;
-        });
+    // const findRectHandler = (e) => {
+    //     const canvas = canvasRef.current;
+    //     const rect = canvas.getBoundingClientRect();
+    //     const mouseX = e.clientX - rect.left;
+    //     const mouseY = e.clientY - rect.top;
+    //     const clickedBoundingBox = boundingBoxes.find((box) => {
+    //         return mouseX >= box.x * canvas.width &&
+    //             mouseX <= box.x2 * canvas.width &&
+    //             mouseY >= box.y * canvas.height &&
+    //             mouseY <= box.y2 * canvas.height;
+    //     });
 
-        console.log(clickedBoundingBox)
-    }
+    //     console.log(clickedBoundingBox)
+    // }
 
     useEffect(() => {
         const image = imgRef.current
-        const canvas = canvasRef.current
+        // const canvas = canvasRef.current
 
-        const ctx = canvas.getContext('2d');
+        // const ctx = canvas.getContext('2d');
 
-        image.onload = () => {
-            console.log('Image loaded', image.width)
+        // image.onload = () => {
+        //     console.log('Image loaded', image.width)
 
-            // Set canvas dimensions to match image dimensions
-            canvas.width = image.width
-            canvas.height = image.height
-        };
+        //     // Set canvas dimensions to match image dimensions
+        //     canvas.width = image.width
+        //     canvas.height = image.height
+        // };
 
-        console.log(boundingBoxes)
+        // console.log(boundingBoxes)
 
-        if(boundingBoxes.length > 0) {
-            // // Draw bounding boxes
-            boundingBoxes.forEach((box) => {
-                drawBoundingBox(ctx, box);
-            });
-        }
+        // if(boundingBoxes.length > 0) {
+        //     // // Draw bounding boxes
+        //     boundingBoxes.forEach((box) => {
+        //         drawBoundingBox(ctx, box);
+        //     });
+        // }
     }, [boundingBoxes, imagePath]);
 
     const drawBoundingBox = (context: CanvasRenderingContext2D, box: IBoundingBox) => {
@@ -76,7 +76,7 @@ const ImageWithBoundingBoxes: React.FC<IImageWithBoundingBoxesProps> = ({ boundi
 
     return (<>
         <img ref={imgRef} src={imagePath} />
-        <canvas ref={canvasRef} className="canvas-overlay" onClick={findRectHandler}/>
+        {/* <canvas ref={canvasRef} className="canvas-overlay" onClick={findRectHandler}/> */}
     </>)
 };
 
