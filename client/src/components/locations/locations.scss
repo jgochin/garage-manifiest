@@ -44,56 +44,6 @@
         display: flex;
         flex-direction: column;
         padding: .4em;
-
-        .items {
-            position: relative;
-            padding: .8em;
-            overflow: auto;
-            flex: 1 1 auto
-        }
-
-        .img-container {
-            flex: 1 auto;
-            position: relative;
-            padding: .8em;
-            overflow: auto;
-            // max-height: 50%;
-
-            .scroll-container {
-                position: absolute;
-                top: 0;
-                right: 0;
-                bottom: 0;
-                left: 0;
-                overflow-y: scroll;
-            }
-
-            form {
-                padding: .4em;
-                display: flex;
-                flex-direction: column;
-                align-items: stretch;
-                margin-bottom: .8em;
-
-                .control-group {
-                    flex: 1 auto;
-                    display: flex;
-                    flex-direction: column;
-                    margin-bottom: .4em;
-
-                    label {
-                        @apply self-start;
-                    }
-
-                    input {
-                        @apply border border-slate-400;
-
-                        flex: 1 auto;
-                        padding: .4em;
-                    }
-                }
-            }
-        }
     }
 
     >.footer {
@@ -108,5 +58,14 @@
         @media screen and (max-width: 400px) {
             font-size: .9em;
         }
+
+        button {
+            @apply border rounded-md bg-slate-500;
+
+            padding: .2em .4em;
+            margin: .2em;
+            color: white;
+        }
     }
+
 }

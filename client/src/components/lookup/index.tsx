@@ -3,16 +3,14 @@ import LookupForm from './lookup-form'
 import LookupResults from './lookup-results'
 import { LookupProvider } from './lookup-context'
 import { Link, useNavigate } from 'react-router-dom'
-import { useAppContext } from 'AppContext'
 import { FaTableList } from 'react-icons/fa6'
 import { DataProviderApi, useDataProvider } from 'data-provider-api'
 
 const Lookup: React.FC = () => {
-    const { appConfig } = useAppContext()
     const navigate = useNavigate()
 
     useEffect(() => {
-        const dataApi: DataProviderApi = useDataProvider(appConfig.rootServerUrl)
+        const dataApi: DataProviderApi = useDataProvider()
 
         const testServerConnection = async () => {
             try {
