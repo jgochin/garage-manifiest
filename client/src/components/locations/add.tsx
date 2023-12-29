@@ -60,9 +60,8 @@ const LocationAdd: React.FC = () => {
             const status = await dataApi.saveLocation(requestBody)
 
             if (status === 201) {
-                navigate(`/location/${formData.locationName}`)
+                navigate(`/location/${formData.locationName}`, { replace: true })
             }
-
         } catch (err) {
             console.error(err)
         }
