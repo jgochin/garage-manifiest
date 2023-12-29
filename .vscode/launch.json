@@ -1,0 +1,36 @@
+// .vscode/launch.json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "tsx",
+            "type": "node",
+            "request": "launch",
+            // Debug current file in VSCode
+            "localRoot": "${workspaceRoot}/server",
+            // "program": "yarn dev",
+            // "program": "${file}",
+            "runtimeExecutable": "yarn",   
+            "runtimeArgs": ["dev"],   
+            // "runtimeExecutable": "${workspaceRoot}/server/node_modules/.bin/tsx",      
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "skipFiles": [
+                "<node_internals>/**",
+                "${workspaceFolder}/node_modules/**",
+            ]
+        },
+        {
+            "name": "Attach to process",
+            "type": "node",
+            "request": "attach",
+            "port": 9229,
+            "skipFiles": [
+                // Node.js internal core modules
+                "<node_internals>/**",
+                // Ignore all dependencies (optional)
+                "${workspaceFolder}/node_modules/**",
+            ],
+        }
+    ]
+}

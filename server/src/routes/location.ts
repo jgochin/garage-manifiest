@@ -112,7 +112,17 @@ locationRouter.post('/new', upload.single('file'), async (req, res) => {
         if(existingLocation) {
             results.push('Existing location not updated.')
         } else {
-            await saveLocation(req.body)
+            const [_, fileExt] = req.file.mimetype.split('/')
+            const location = req.body.location
+            const fileName = `${location}.${fileExt}`
+            const newLocation = {
+                location: req.body.location,
+                imageFileName: fileName,
+                contentType: req.file.mimetype,
+                contentLength: req.file.size
+            } 
+
+            await saveLocation(newLocation)
             results.push('New location saved')
         }
 

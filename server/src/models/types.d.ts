@@ -8,6 +8,7 @@ export interface IManifestItem extends Document {
 }
 
 export interface ILocation extends Document {
+    _id?: string
     location: string
     imageFileName: string
     contentType: String,

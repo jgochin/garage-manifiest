@@ -57,6 +57,7 @@
   "scripts": {
     "start": "node dist/app.js",
     "dev": "nodemon",
+    "debug": "nodemon --inspect-brk",
     "build": "./build.sh",
     "test": "jest",
     "test:seed": "ts-node src/routes/recipes-router-seed.ts",

@@ -7,7 +7,7 @@ const saveImage = async (file: any): Promise<mongoose.mongo.BSON.ObjectId> => {
     const bucket = new mongoose.mongo.GridFSBucket(conn.db, { bucketName: 'locationImages' })
 
     // Use Promises and async/await for better readability
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         const uploadStream = bucket.openUploadStream(file.originalname)
         const readableStream = new Readable()
 
@@ -21,7 +21,7 @@ const saveImage = async (file: any): Promise<mongoose.mongo.BSON.ObjectId> => {
         })
 
         uploadStream.on('error', (error) => {
-            throw error
+            reject(error)
         })
     })
 }
