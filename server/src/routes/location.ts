@@ -3,10 +3,11 @@
 import express, { Request, Response } from 'express'
 import multer from 'multer'
 import mongoose, { } from 'mongoose'
-import { ILocation } from '@/models/types'
+import { ILocation, IManifestItem } from '@/models/types'
 import { getLocation, getLocations, getManifestItems, saveLocation } from '@/api/manifest'
 import { deleteImage, findImage, getImageBuffer, getImageStream, saveImage } from '@/api/image'
 import { detectObjectsInImage } from '@/api/vision'
+import { objectSortAscPredicate } from '@/utils'
 
 const locationRouter = express.Router()
 const storage = multer.memoryStorage()
@@ -29,8 +30,8 @@ locationRouter.get('/', async (req: Request, res: Response) => {
 
 locationRouter.get('/:id', async (req: Request, res: Response) => {
     try {
-        const { id }= req.params
-        const results = await getManifestItems(id)
+        const { id } = req.params
+        const results = await getLocation(id)
 
         if (results) {
             res.status(200).json(results).end()
@@ -43,9 +44,26 @@ locationRouter.get('/:id', async (req: Request, res: Response) => {
     }
 })
 
-locationRouter.get('/image/:location', async (req: Request, res: Response) => {
+locationRouter.get('/:id/items', async (req: Request, res: Response) => {
     try {
-        const location: ILocation = await getLocation(req.params.location)
+        const { id } = req.params
+        const location: ILocation = await getLocation(id)
+        const items: IManifestItem[] = await getManifestItems(id)
+
+        if (items.length) {
+            res.status(200).json({ ...location, items }).end()
+        } else {
+            res.status(204).end()
+        }
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: 'Internal server error' })
+    }
+})
+
+locationRouter.get('/:id/image', async (req: Request, res: Response) => {
+    try {
+        const location: ILocation = await getLocation(req.params.id)
         const downloadStream: mongoose.mongo.GridFSBucketReadStream = getImageStream(location.imageFileName)
 
         res.set('Content-Type', String(location.contentType))
@@ -54,6 +72,10 @@ locationRouter.get('/image/:location', async (req: Request, res: Response) => {
 
         downloadStream.on('finish', () => {
             res.status(200).end()
+        })
+
+        downloadStream.on('error', (err) => {
+            res.status(404).end()
         })
     } catch (err) {
         console.error(err)
@@ -81,10 +103,10 @@ locationRouter.post('/upload-image/:location', upload.single('image'), async (re
             imageFileName: fileName,
             contentType: req.file.mimetype,
             contentLength: req.file.size
-        } 
+        }
 
         await saveImage(req.file)
-        await saveLocation(newLocation)
+        await saveLocation(newLocation as unknown as ILocation)
 
         res.status(201).send('Image uploaded successfully')
     } catch (error) {
@@ -93,44 +115,44 @@ locationRouter.post('/upload-image/:location', upload.single('image'), async (re
     }
 })
 
-locationRouter.post('/new', upload.single('file'), async (req, res) => {
+locationRouter.post('/save', upload.single('file'), async (req, res) => {
     const results: string[] = []
+    const locationData: ILocation = req.body
 
     try {
-        const existingLocation: ILocation = await getLocation(req.body.location)
-        const existingImage: mongoose.mongo.GridFSFile = await findImage(existingLocation?.imageFileName)
+        const existingLocation: ILocation = locationData._id ? await getLocation(locationData._id) : null
+        const existingImage: mongoose.mongo.GridFSFile = existingLocation ? await findImage(existingLocation?.imageFileName) : null
 
-        // Replace existing image
-        if (existingImage) {
+        // Replace existing image if a new file has been supplied
+        if ((existingImage && req.file)) {
             await deleteImage(existingImage._id)
             results.push('Existing image deleted')
         }
 
-        await saveImage(req.file)
-        results.push('New Image Saved')
-
-        if(existingLocation) {
-            results.push('Existing location not updated.')
-        } else {
+        // Save file if supplied
+        if (req.file) {
             const [_, fileExt] = req.file.mimetype.split('/')
-            const location = req.body.location
-            const fileName = `${location}.${fileExt}`
-            const newLocation = {
-                location: req.body.location,
-                imageFileName: fileName,
-                contentType: req.file.mimetype,
-                contentLength: req.file.size
-            } 
 
-            await saveLocation(newLocation)
-            results.push('New location saved')
+            locationData.imageFileName = `${locationData.location}.${fileExt}`
+            locationData.contentType = req.file.mimetype
+            locationData.contentLength = req.file.size
+
+            await saveImage(req.file)
+
+            results.push('New Image Saved')
         }
+
+        locationData.isNew = !existingLocation
+
+        await saveLocation(locationData)
+
+        results.push('Location saved')
 
         res.status(201).json(results)
     } catch (error) {
-        if (error.code === '11000') {
-            results.push('New location saved')
-            res.status(201).json(['Loaction already exists.'])
+        if (error.code === 11000) {    
+            results.push('Loaction already exists.')        
+            res.status(201).json(results)
         } else {
             res.status(500).json([error])
         }

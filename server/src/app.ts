@@ -78,6 +78,17 @@ function initApp() {
         console.log('Server is running on port', port);
     });
 
+    process.addListener('exit', async (info) => {
+        console.log(info)
+
+        server.closeIdleConnections()
+
+        await mongoose.disconnect()
+        await server.close()
+
+        console.log('Server closed')
+    })
+
     async function closeServer() {
         await server.close()
     }

@@ -26,7 +26,7 @@ const Location: React.FC = () => {
     // Update the state when location.items changes
 
     const getLocationData = async (): Promise<IListItem[]> => {
-        const items: IListItem[] = await dataApi.location(id)
+        const {items, location, _id} = await dataApi.locationItems(id)
 
         return items
     }
@@ -40,7 +40,7 @@ const Location: React.FC = () => {
     //     read()
     // }, [])
 
-    const handleSave = async (changedItem: IListItem): Promise<boolean> => await dataApi.saveItem(id, changedItem)
+    const handleSave = async (changedItem: IListItem): Promise<boolean> => await dataApi.saveItem(changedItem._id, changedItem)
     
     const handleDelete = async (changedItem: IListItem): Promise<boolean> => await dataApi.removeItem(changedItem)
     

@@ -8,7 +8,7 @@ const itemRouter = express.Router()
 itemRouter.post('/', async (req: Request, res: Response) => {
     try {
         const { location, item } = req.body
-        const newItem: any = { ...req.body, hash: md5(location + item) }
+        const newItem: any = { location, item }
         const results = await newManifestItem(newItem)
 
         if (results) {
@@ -40,10 +40,10 @@ itemRouter.patch('/', async (req: Request, res: Response) => {
 
 itemRouter.delete('/:hash', async (req: Request, res: Response) => {
     try {
-        await deleteManifestItem(req.params.hash) 
+        await deleteManifestItem(req.params.hash)
 
         res.status(201).end()
-    } catch(err) {
+    } catch (err) {
         console.error(err)
         res.status(500).json({ error: 'Internal server error' }).end()
     }

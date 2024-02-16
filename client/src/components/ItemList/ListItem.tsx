@@ -5,7 +5,7 @@ import { IItemListEditableProps, IListItem } from './types'
 import { ITEM_UI_BUTTONS, ITEM_UI_STATE } from './constants'
 import { useItemListContext } from './context'
 
-const ListItem: React.FC<IItemListEditableProps> = ({ item, onUpdate, onUndo, onDelete, onLabelClick, isEditMode }) => {
+const ListItem: React.FC<IItemListEditableProps> = ({ item, onUpdate, onUndo, onDelete, onLabelClick, onEditClick, isEditMode }) => {
     const { index, value, state } = item
     const [description, setDescription] = useState(value)
     const { itemList, setItemList } = useItemListContext()
@@ -25,13 +25,18 @@ const ListItem: React.FC<IItemListEditableProps> = ({ item, onUpdate, onUndo, on
                 break
 
             case ITEM_UI_BUTTONS.EDIT:
-                // item.state = ITEM_UI_STATE.UPDATE
-                const newItem: IListItem = { ...item, state: ITEM_UI_STATE.UPDATE }
-                const newItems: IListItem[] = [...itemList.items]
+                if (onEditClick) {
+                    onEditClick(item)
+                } else {
+                    // item.state = ITEM_UI_STATE.UPDATE
+                    const newItem: IListItem = { ...item, state: ITEM_UI_STATE.UPDATE }
+                    const newItems: IListItem[] = [...itemList.items]
 
-                newItems[item.index] = newItem
+                    newItems[item.index] = newItem
 
-                setItemList({ ...itemList, isEditMode: true, items: newItems })
+                    setItemList({ ...itemList, isEditMode: true, items: newItems })
+                }
+
                 break
 
             case ITEM_UI_BUTTONS.DELETE:

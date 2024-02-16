@@ -4,7 +4,6 @@ export interface IManifestItem extends Document {
     _id?: string
     location: string
     item: string
-    hash: string
 }
 
 export interface ILocation extends Document {

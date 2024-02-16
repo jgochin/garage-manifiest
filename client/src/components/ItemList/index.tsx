@@ -3,7 +3,6 @@ import { useItemListContext } from './context'
 import ListItem from './ListItem'
 import { IItemListData, IListItem, IListItemsProps } from './types'
 import { ITEM_UI_STATE } from './constants'
-import { DataProviderApi, useDataProvider } from 'data-provider-api'
 
 export interface ItemListRef {
     addNewItem: () => void
@@ -17,13 +16,19 @@ const ItemList: React.ForwardRefRenderFunction<ItemListRef, IListItemsProps> = (
 
         clickHandler(item)
     }
+
+    const handleEditClick = (item: IListItem, clickHandler: Function) => {
+        if (!clickHandler || !item) return
+
+        clickHandler(item)
+    }
     
     // Adds a new, blank item at the top of the list of items, and reindexes them.
     const addNewItem = () => {
         setItemList((prevItemList: IItemListData) => {
             try {
                 const itemAdded: boolean = prevItemList.items.some(item => item.state === ITEM_UI_STATE.NEW)
-                const newItem: IListItem = itemAdded ? null : { index: 0, value: '', state: ITEM_UI_STATE.NEW }
+                const newItem: IListItem = itemAdded ? null : { _id: '', index: 0, value: '', state: ITEM_UI_STATE.NEW }
                 const newItems: IListItem[] = newItem ? [newItem, ...prevItemList.items] : [...prevItemList.items]
                 const newItemList: IItemListData = { ...prevItemList, items: newItems, isEditMode: true }
 
@@ -93,7 +98,7 @@ const ItemList: React.ForwardRefRenderFunction<ItemListRef, IListItemsProps> = (
             <div className="scroll-container">
                 {itemList.items.length > 0 ? (
                     itemList.items.map((item) => <>
-                        <ListItem key={item.index} onLabelClick={() => handleLabelClick(item, props.onLabelClick)} onUpdate={updateItem} onUndo={undoItem} onDelete={deleteItem} item={item} isEditMode={itemList.isEditMode} />
+                        <ListItem key={item.index} onLabelClick={() => handleLabelClick(item, props.onLabelClick)} onUpdate={updateItem} onUndo={undoItem} onDelete={deleteItem} item={item} isEditMode={itemList.isEditMode} onEditClick={props.onEditClick ? (item: IListItem) => handleEditClick(item, props.onEditClick) : null} />
                     </>)
                 ) : (
                     <p>No results to display.</p>

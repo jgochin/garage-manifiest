@@ -4,14 +4,22 @@ import { ITEM_UI_STATE } from '@app/ItemList/constants'
 import axiosInstance from "axiosInstance";
 
 export interface IManifestItem {
+    _id: string
     hash?: string
     item: string
     location: string
 }
 
 export interface ILocation {
-    _id: string
+    _id?: string
     location: string
+    imageFileName: string
+    contentType: String
+    contentLength: Number
+}
+
+export interface ILocationResult extends ILocation {
+    items: IListItem[]
 }
 
 export class DataProviderApi {
@@ -35,25 +43,37 @@ export class DataProviderApi {
         return await axiosInstance.get(this.heartbeatUrl, { timeout: 300 })
     }
 
-    async location(id: string = ''): Promise<IListItem[]> {
+    async location(id: string = ''): Promise<ILocation> {
+        if (!id) return null
+
         const url = `${this.rootServerUrl}/location/${id}`
         const results = await axiosInstance.get(url)
-        const ListItems: IListItem[] = results.data.map((item: IManifestItem, index: number): IListItem => {
-            const newItem: IListItem = { index, value: item.item, state: ITEM_UI_STATE.READONLY, hash: item.hash }
+
+        return results.data as ILocation
+    }
+
+    async locationItems(id: string): Promise<ILocationResult> {
+        if (!id) throw new Error('locationItems, requires the id parameter')
+
+        const url = `${this.rootServerUrl}/location/${id}/items`
+        const results = await axiosInstance.get(url)
+        const listItems = results.status === 204 ? [] : results.data.items.map((item: IManifestItem, index: number): IListItem => {
+            const newItem: IListItem = { _id: item._id, index, value: item.item, state: ITEM_UI_STATE.READONLY, hash: item.hash }
 
             return newItem
         })
+        const listItemsResult: ILocationResult = { ...results.data, items: listItems }
 
-        return ListItems
+        return listItemsResult
     }
 
     locationImageUrl(location: string): string {
-        return `${this.rootServerUrl}/location/image/${location}`
+        return `${this.rootServerUrl}/location/${location}/image`
     }
 
     async saveLocation(requestBody: FormData): Promise<number | Error> {
         try {
-            const url = `${this.rootServerUrl}/location/new`
+            const url = `${this.rootServerUrl}/location/save`
             const rsp = await axiosInstance.post(url, requestBody)
 
             return rsp.status
@@ -67,7 +87,7 @@ export class DataProviderApi {
         const results = await axiosInstance.get(url)
 
         const ListItems: IListItem[] = results.data.map((item: ILocation, index: number): IListItem => {
-            const newItem: IListItem = { index, value: item.location, state: ITEM_UI_STATE.READONLY, hash: item._id }
+            const newItem: IListItem = { _id: item._id, index, value: item.location, state: ITEM_UI_STATE.READONLY, hash: item._id }
 
             return newItem
         })
@@ -85,7 +105,7 @@ export class DataProviderApi {
 
     async saveItem(location: string, item: IListItem): Promise<any> {
         const url = `${this.rootServerUrl}/item`
-        const payload: IManifestItem = { location, item: item.value, hash: item.hash }
+        const payload: IManifestItem = {_id: item._id, location, item: item.value, hash: item.hash }
 
         if (item.state === ITEM_UI_STATE.NEW) {
             await axiosInstance.post(url, payload)
@@ -99,7 +119,7 @@ export class DataProviderApi {
     }
 
     async removeItem(item): Promise<boolean> {
-        const url = `${this.rootServerUrl}/item/${item.hash}`
+        const url = `${this.rootServerUrl}/item/${item._id}`
 
         try {
             await axiosInstance.delete(url)

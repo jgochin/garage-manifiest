@@ -9,12 +9,6 @@ const manifestItemSchema = new Schema<IManifestItem>({
     item: {
         type: String,
         required: true,
-    },
-    hash: {
-        type: String,
-        required: true,
-        index: true,
-        unique: true,
     }
 });
 manifestItemSchema.index({ item: 'text' });

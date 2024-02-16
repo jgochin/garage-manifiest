@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from "react"
 
 export interface IListItem {
+    _id: string
     index: number
     value: any
     state?: number
@@ -17,6 +18,7 @@ export interface IListItemProps {
 
 export interface IItemListEditableProps extends IListItemProps {
     isEditMode: boolean
+    onEditClick: (clickedItem: IListItem) => void
 }
 
 export interface IItemListData {
@@ -36,5 +38,7 @@ export interface IListItemsProps {
     onBeforeDelete?: (changedItem: IListItem) => boolean
     onDelete?: (changedItem: IListItem) => Promise<boolean>
     onLabelClick?: (clickedItem: IListItem) => void
+    onEditClick?: (clickedItem: IListItem) => void
+
 }
 

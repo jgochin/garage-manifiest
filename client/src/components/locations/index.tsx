@@ -18,10 +18,18 @@ const Locations: React.FC = () => {
     }
 
     const handleLabelClick = (item: IListItem) => {
-        const url = `/location/${item.value}`
+        const url = `/location/${item._id}`
         
         navigate(url)
     }
+
+    const handleEditClick = (item: IListItem) => {
+        const url = `/locations/${item.value}/edit`
+
+        navigate(url)
+    }
+
+    const handleBeforeDelete = (changedItem: IListItem): boolean => confirm(`Are you sure you want to delete location '${changedItem.value}'`)
 
     // const handleSave = async (changedItem: IListItem): Promise<boolean> => await dataApi.saveItem(id, changedItem)
     // const handleDelete = async (changedItem: IListItem): Promise<Boolean> => dataApi.remove(changedItem)
@@ -39,8 +47,9 @@ const Locations: React.FC = () => {
                         ref={itemListRef}
                         onLoad={() => getLocationsData()}
                         onLabelClick={(item: IListItem) => handleLabelClick(item)}
+                        onEditClick={(item) => handleEditClick(item)}
                     // onSave={(changedItem: IListItem) => handleSave(changedItem)}
-                    // onBeforeDelete={(changedItem: IListItem) => handleBeforeDelete(changedItem)}
+                    onBeforeDelete={(changedItem: IListItem) => handleBeforeDelete(changedItem)}
                     // onDelete={(changedItem: IListItem) => handleDelete(changedItem)}
                     />
                 </ItemListProvider>

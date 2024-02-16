@@ -19,6 +19,6 @@ const locationSchema = new Schema<ILocation>({
     },
 });
 
-const LocationImage = model<ILocation>('Location', locationSchema);
+const Location = model<ILocation>('Location', locationSchema);
 
-export default LocationImage
+export default Location
