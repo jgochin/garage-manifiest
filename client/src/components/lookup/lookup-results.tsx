@@ -18,9 +18,9 @@ const LookupResults: React.FC = () => {
                 </thead>
                 <tbody>
                     {lookupData.searchResults.map((item) => (
-                        <tr key={item.hash}>
+                        <tr key={item._id}>
                             <td>{item.item}</td>
-                            <td className="col-2" onClick={() => navigate(`/location/${item.location}`)}>
+                            <td className="col-2" onClick={() => navigate(`/location/${item.locationId}`)}>
                                 <span>{item.location}<FaEye /></span></td>
                         </tr>
                     ))

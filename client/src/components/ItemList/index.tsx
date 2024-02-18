@@ -46,7 +46,7 @@ const ItemList: React.ForwardRefRenderFunction<ItemListRef, IListItemsProps> = (
             const success: boolean = await props.onSave(changedItem) //dataApi.saveItem(location.name, changedItem)
 
             if (success) {
-                const items: IListItem[] = await props.onLoad() //await dataApi.location(location.name)
+                const items = await props.onLoad() //await dataApi.location(location.name)
 
                 setItemList({ ...itemList, items, isEditMode: false })
             }
@@ -64,7 +64,9 @@ const ItemList: React.ForwardRefRenderFunction<ItemListRef, IListItemsProps> = (
     const deleteItem = async (changedItem: IListItem): Promise<boolean> => {
         if (props.onBeforeDelete(changedItem)) {
             try {
-                if (await props.onDelete(changedItem)) { // dataApi.remove(changedItem)
+                const r = await props.onDelete(changedItem)
+
+                if (r) { // dataApi.remove(changedItem)
                     const items: IListItem[] = await props.onLoad() // await dataApi.location(location.name)
 
                     setItemList({ ...itemList, items, isEditMode: false })

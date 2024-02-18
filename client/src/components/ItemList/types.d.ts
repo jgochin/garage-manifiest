@@ -1,3 +1,4 @@
+import { ILocationResult } from "data-provider-api"
 import { Dispatch, SetStateAction } from "react"
 
 export interface IListItem {
@@ -32,7 +33,7 @@ export interface IItemListContext {
 }
 
 export interface IListItemsProps {
-    onLoad?: () => Promise<IListItem[]>
+    onLoad?: () => Promise<any>
     onSave?: (changedItem: IListItem) => Promise<boolean>
     onUndo?: (changedItem: IListItem) => Promise<boolean>
     onBeforeDelete?: (changedItem: IListItem) => boolean

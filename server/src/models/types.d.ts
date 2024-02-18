@@ -2,7 +2,7 @@ import { Document } from "mongoose"
 
 export interface IManifestItem extends Document {
     _id?: string
-    location: string
+    locationId: string
     item: string
 }
 
@@ -12,6 +12,7 @@ export interface ILocation extends Document {
     imageFileName: string
     contentType: String,
     contentLength: Number
+    imageId: string
 }
 
 // export interface MulterRequest extends Request {

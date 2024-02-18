@@ -1,6 +1,6 @@
 {
   "name": "garage-manifest-server",
-  "version": "0.1.0",
+  "version": "0.4.1",
   "description": "",
   "type": "commonjs",
   "main": "app.js",
@@ -9,7 +9,7 @@
   "license": "MIT",
   "proxy": "http://localhost:3000",
   "dependencies": {
-    "@google-cloud/vision": "^4.0.2",
+    "@google-cloud/vision": "^4.1.0",
     "connect-mongo": "^5.0.0",
     "connect-mongodb-session": "^3.1.1",
     "cors": "^2.8.5",

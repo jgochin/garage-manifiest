@@ -21,8 +21,6 @@ const LocationEdit: React.FC = () => {
     const validateForm = (newFormData) => {
         const isValid: boolean = newFormData.locationName || (newFormData.locationImageName && newFormData.file)
 
-        console.log('validateForm', newFormData, isValid)
-
         setIsFormInvalid(!isValid)
     }
 
@@ -41,8 +39,6 @@ const LocationEdit: React.FC = () => {
         const file = e.target.files[0]
         const locationImageName = formData.locationName + '.' + file.type.split('/')[1]
         const newFormData = { ...formData, locationImageName, file }
-
-        console.log('handleChange', newFormData)
 
         setFormData(newFormData)
         validateForm(newFormData)
@@ -65,9 +61,9 @@ const LocationEdit: React.FC = () => {
         formData.file && requestBody.append('file', formData.file, formData.locationImageName)
 
         try {
-            const status = await dataApi.saveLocation(requestBody)
+            const result = await dataApi.saveLocation(requestBody)
 
-            if (status === 201) {
+            if (result.status === 201) {
                 navigate(`/location/${formData.locationName}`, { replace: true })
             }
         } catch (err) {

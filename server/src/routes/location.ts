@@ -4,10 +4,10 @@ import express, { Request, Response } from 'express'
 import multer from 'multer'
 import mongoose, { } from 'mongoose'
 import { ILocation, IManifestItem } from '@/models/types'
-import { getLocation, getLocations, getManifestItems, saveLocation } from '@/api/manifest'
+import { deleteLocation, getLocation, getLocations, getManifestItems, saveLocation } from '@/api/manifest'
 import { deleteImage, findImage, getImageBuffer, getImageStream, saveImage } from '@/api/image'
 import { detectObjectsInImage } from '@/api/vision'
-import { objectSortAscPredicate } from '@/utils'
+
 
 const locationRouter = express.Router()
 const storage = multer.memoryStorage()
@@ -50,11 +50,9 @@ locationRouter.get('/:id/items', async (req: Request, res: Response) => {
         const location: ILocation = await getLocation(id)
         const items: IManifestItem[] = await getManifestItems(id)
 
-        if (items.length) {
-            res.status(200).json({ ...location, items }).end()
-        } else {
-            res.status(204).end()
-        }
+    
+        res.status(200).json({ ...location, items }).end()
+
     } catch (error) {
         console.error(error)
         res.status(500).json({ error: 'Internal server error' })
@@ -125,7 +123,7 @@ locationRouter.post('/save', upload.single('file'), async (req, res) => {
 
         // Replace existing image if a new file has been supplied
         if ((existingImage && req.file)) {
-            await deleteImage(existingImage._id)
+            await deleteImage(existingImage._id.toString())
             results.push('Existing image deleted')
         }
 
@@ -137,18 +135,16 @@ locationRouter.post('/save', upload.single('file'), async (req, res) => {
             locationData.contentType = req.file.mimetype
             locationData.contentLength = req.file.size
 
-            await saveImage(req.file)
+            locationData.imageId = (await saveImage(req.file)).toString()
 
             results.push('New Image Saved')
         }
 
         locationData.isNew = !existingLocation
 
-        await saveLocation(locationData)
-
         results.push('Location saved')
 
-        res.status(201).json(results)
+        res.status(201).json(await saveLocation(locationData))
     } catch (error) {
         if (error.code === 11000) {    
             results.push('Loaction already exists.')        
@@ -157,6 +153,19 @@ locationRouter.post('/save', upload.single('file'), async (req, res) => {
             res.status(500).json([error])
         }
     }
+})
+
+locationRouter.delete('/:id', async (req, res) => {
+    const id: string = req.params.id
+ 
+    try {
+        const result: string = await deleteLocation(id)
+
+        res.status(200).send(result)
+    } catch (error) {
+        res.status(error.status).send(error.message)
+    }
+
 })
 
 

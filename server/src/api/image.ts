@@ -1,3 +1,4 @@
+import { createObjectId } from '@/utils'
 import mongoose, { ObjectId } from 'mongoose'
 import { Readable } from 'stream'
 import streamToBuffer from 'stream-to-buffer'
@@ -47,11 +48,15 @@ const findImage = async (imageFileName: string) => {
     }
 }
 
-const deleteImage = async (id: mongoose.mongo.BSON.ObjectId) => {
+const deleteImage = async (id: string | mongoose.mongo.BSON.ObjectId) => {
     const conn = mongoose.connection
     const bucket = new mongoose.mongo.GridFSBucket(conn.db, { bucketName: 'locationImages' })
 
-    await bucket.delete(id)
+    try {
+        return await bucket.delete(createObjectId(id))
+    } catch(error) {
+
+    }
 }
 
 const getImageStream = (imageFileName: string) => {

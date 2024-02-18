@@ -40,11 +40,11 @@ manageRouter.post('/import', async (req: Request, res: Response) => {
     try {
         const rawLines: string[] = req.body.split('\n')
         const tupleLines: string[][] = rawLines.map(line => line.split('\t'))
-        const objLines: IManifestItem[] = tupleLines.map(([location, item]) => { return { location, item, hash: md5(location + item) as string } as IManifestItem })
+        const objLines: IManifestItem[] = tupleLines.map(([locationId, item]) => { return { locationId, item } as IManifestItem})
 
         const bulkOps = objLines.map((data: IManifestItem) => ({
             updateOne: {
-                filter: { hash: data.hash },
+                filter: { _id: data.locationId },
                 update: { $set: data },
                 upsert: true,
             },

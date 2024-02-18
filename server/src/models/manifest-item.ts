@@ -2,7 +2,7 @@ import { Schema, model } from 'mongoose';
 import { IManifestItem } from '@/models/types';
 
 const manifestItemSchema = new Schema<IManifestItem>({
-    location: {
+    locationId: {
         type: String,
         required: true,
     },
@@ -11,7 +11,8 @@ const manifestItemSchema = new Schema<IManifestItem>({
         required: true,
     }
 });
-manifestItemSchema.index({ item: 'text' });
+manifestItemSchema.index({ item: 'text'});
+manifestItemSchema.index({ locationId: 1 });
 
 const ManifestItem = model<IManifestItem>('ManifestItem', manifestItemSchema);
 

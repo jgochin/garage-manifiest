@@ -1,14 +1,14 @@
 
 import express, { Request, Response } from 'express'
-import md5 from 'md5'
 import { deleteManifestItem, newManifestItem, updateManifestItem } from '@/api/manifest'
+import { createObjectId } from '@/utils'
 
 const itemRouter = express.Router()
 
 itemRouter.post('/', async (req: Request, res: Response) => {
     try {
-        const { location, item } = req.body
-        const newItem: any = { location, item }
+        const { locationId, item } = req.body
+        const newItem: any = { locationId: createObjectId(locationId), item }
         const results = await newManifestItem(newItem)
 
         if (results) {
@@ -28,7 +28,7 @@ itemRouter.patch('/', async (req: Request, res: Response) => {
         const results = await updateManifestItem(newItem)
 
         if (results) {
-            res.status(201).end()
+            res.status(204).end()
         } else {
             res.status(404).send(res.statusMessage).end()
         }
@@ -38,11 +38,11 @@ itemRouter.patch('/', async (req: Request, res: Response) => {
     }
 })
 
-itemRouter.delete('/:hash', async (req: Request, res: Response) => {
+itemRouter.delete('/:id', async (req: Request, res: Response) => {
     try {
-        await deleteManifestItem(req.params.hash)
+        await deleteManifestItem(req.params.id)
 
-        res.status(201).end()
+        res.status(204).end()
     } catch (err) {
         console.error(err)
         res.status(500).json({ error: 'Internal server error' }).end()

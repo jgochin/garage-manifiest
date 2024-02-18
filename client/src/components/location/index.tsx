@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { FaChevronLeft, FaPlus } from "react-icons/fa6"
 
 
 import { ItemListProvider } from '../ItemList/context'
 // import { RiQrScan2Line } from "react-icons/ri";
-import { DataProviderApi, useDataProvider } from 'data-provider-api'
+import { DataProviderApi, ILocation, ILocationResult, useDataProvider } from 'data-provider-api'
 import ImageWithBoundingBoxes from './image'
 import { IListItem } from '@app/ItemList/types'
 import ItemList, { ItemListRef } from '@app/ItemList'
@@ -14,7 +14,7 @@ const Location: React.FC = () => {
     const dataApi: DataProviderApi = useDataProvider()
     const itemListRef = useRef<ItemListRef>(null);
     const { id } = useParams()
-
+    const [ location, setLocation ] = useState<ILocation>({location: '', imageId: '', imageFileName: '', contentType: '', contentLength: 0 })
     // const [boundingBoxes, setBoundingBoxes] = useState<IBoundingBox[]>([])
 
     // const handleScanClick = async () => {
@@ -25,26 +25,21 @@ const Location: React.FC = () => {
 
     // Update the state when location.items changes
 
-    const getLocationData = async (): Promise<IListItem[]> => {
-        const {items, location, _id} = await dataApi.locationItems(id)
+    const getLocationData = async (): Promise<IListItem[]> => {        
+        const location: ILocationResult = await dataApi.locationItems(id)
+    
+        setLocation(location)
 
-        return items
+        return location.items
     }
 
-    // useEffect(() => {
-    //     const read = async () => {
-
-    //         // setItemList({...itemList, items})
-    //     }
-
-    //     read()
-    // }, [])
-
-    const handleSave = async (changedItem: IListItem): Promise<boolean> => await dataApi.saveItem(changedItem._id, changedItem)
+    const handleSave = async (changedItem: IListItem): Promise<boolean> => {
+        return await dataApi.saveItem(location._id, changedItem)
+    }
     
     const handleDelete = async (changedItem: IListItem): Promise<boolean> => await dataApi.removeItem(changedItem)
     
-    const handleBeforeDelete = (changedItem: IListItem): boolean => confirm(`Are you sure you want to delete '${changedItem.value}' from '${id}'`)
+    const handleBeforeDelete = (changedItem: IListItem): boolean => confirm(`Are you sure you want to delete '${changedItem.value}' from '${location.location}'`)
 
     return (
         <ItemListProvider>
@@ -53,7 +48,7 @@ const Location: React.FC = () => {
                     <button type='button' onClick={() => history.back()}>
                         <FaChevronLeft className="icon" />
                     </button>
-                    <span>Location {id}</span>
+                    <span>Location {location.location}</span>
                     <button type="button" onClick={() => {
                         if (itemListRef.current) {
                             itemListRef.current.addNewItem();

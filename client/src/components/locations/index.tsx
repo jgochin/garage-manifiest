@@ -32,7 +32,8 @@ const Locations: React.FC = () => {
     const handleBeforeDelete = (changedItem: IListItem): boolean => confirm(`Are you sure you want to delete location '${changedItem.value}'`)
 
     // const handleSave = async (changedItem: IListItem): Promise<boolean> => await dataApi.saveItem(id, changedItem)
-    // const handleDelete = async (changedItem: IListItem): Promise<Boolean> => dataApi.remove(changedItem)
+    
+    const handleDelete = async (changedItem: IListItem): Promise<boolean> => dataApi.removeLocation(changedItem)
 
     return (
         <div className="locations-component">
@@ -49,8 +50,8 @@ const Locations: React.FC = () => {
                         onLabelClick={(item: IListItem) => handleLabelClick(item)}
                         onEditClick={(item) => handleEditClick(item)}
                     // onSave={(changedItem: IListItem) => handleSave(changedItem)}
-                    onBeforeDelete={(changedItem: IListItem) => handleBeforeDelete(changedItem)}
-                    // onDelete={(changedItem: IListItem) => handleDelete(changedItem)}
+                        onBeforeDelete={(changedItem: IListItem) => handleBeforeDelete(changedItem)}
+                        onDelete={(changedItem: IListItem) => handleDelete(changedItem)}
                     />
                 </ItemListProvider>
             </div>
